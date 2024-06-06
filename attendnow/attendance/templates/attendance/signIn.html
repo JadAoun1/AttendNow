@@ -1,0 +1,20 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<h1>Sign In</h1>
+<a href="#" class="btn btn-google">Sign in with Google</a>
+<div class="or">OR</div>
+<form method="post">
+    {% csrf_token %}
+    <!-- Input for username -->
+    <input type="text" name="username" placeholder="Username" required>
+    <!-- Input for password -->
+    <input type="password" name="password" placeholder="Password" required>
+    <!-- Submit button -->
+    <button type="submit" class="btn">Log In</button>
+</form>
+<!-- Link to Sign Up page -->
+<p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+{% endblock %}
