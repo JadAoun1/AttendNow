@@ -1,9 +1,20 @@
 from django.shortcuts import render
 
-# Create your views here.
+def home(request):
+    return render(request, 'attendance/home.html')
 
+def about(request):
+    return render(request, 'attendance/about.html')
 
-from django.http import HttpResponse
+def profile(request):
+    return render(request, 'attendance/profile.html')
 
-def index(request):
-    return HttpResponse("Hello, AttendNow!")
+def signin(request):
+    return render(request, 'attendance/signin.html')
+
+def signup(request):
+    return render(request, 'attendance/signup.html')
+
+def logout(request):
+    # Handle logout logic here
+    pass
