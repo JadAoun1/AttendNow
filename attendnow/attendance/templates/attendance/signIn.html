@@ -8,13 +8,14 @@
 <div class="or">OR</div>
 <form method="post">
     {% csrf_token %}
-    <!-- Input for username -->
+    {% if form.errors %}
+        <div class="notification" style="display: block;">
+            <p>{{ form.errors }}</p>
+        </div>
+    {% endif %}
     <input type="text" name="username" placeholder="Username" required>
-    <!-- Input for password -->
     <input type="password" name="password" placeholder="Password" required>
-    <!-- Submit button -->
     <button type="submit" class="btn">Log In</button>
 </form>
-<!-- Link to Sign Up page -->
 <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
 {% endblock %}
