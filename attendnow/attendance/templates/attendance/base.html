@@ -5,21 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AttendNow{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'attendance/styles.css' %}">
 </head>
 <body>
-    <!-- Messages Area -->
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="alert {{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    <!-- Navbar Section -->
+    <!-- Navbar section -->
     <div class="navbar">
         <a href="{% url 'home' %}" class="brand">AttendNow</a>
         <div class="nav-links">
@@ -27,25 +16,19 @@
             <a href="{% url 'about' %}">About</a>
             {% if user.is_authenticated %}
                 <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'attendance' %}">Attendance</a>
-                <a href="{% url 'settings' %}">Settings</a>
                 <a href="{% url 'logout' %}">Logout</a>
             {% else %}
-                <a href="{% url 'signin' %}">Sign In</a>
-                <a href="{% url 'signup' %}">Sign Up</a>
+                <a href="{% url 'sign_in' %}">Sign In</a>
+                <a href="{% url 'sign_up' %}">Sign Up</a>
             {% endif %}
         </div>
     </div>
-    <!-- Main Content Wrapper -->
+    <!-- Main content wrapper to center content -->
     <div class="content-wrapper">
         <div class="container">
             <img src="{% static 'logo.png' %}" alt="Logo">
             {% block content %}{% endblock %}
         </div>
-    </div>
-    <!-- Footer Section -->
-    <div class="footer">
-        <p>&copy; 2024 AttendNow. All rights reserved.</p>
     </div>
 </body>
 </html>
