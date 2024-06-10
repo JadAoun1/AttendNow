@@ -21,7 +21,7 @@ def sign_in_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'Successfully signed in!')
-                return redirect('home')
+                return redirect('profile')  # Redirect to profile page
             else:
                 messages.error(request, 'Invalid username or password.')
         else:
@@ -34,9 +34,10 @@ def sign_up_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Account created successfully. You can now sign in.')
-            return redirect('sign_in')
+            user = form.save()
+            login(request, user)  # Automatically log in the user
+            messages.success(request, 'Account created successfully.')
+            return redirect('profile')  # Redirect to profile page
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
