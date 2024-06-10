@@ -10,4 +10,8 @@ urlpatterns = [
     path('attendance/', views.attendance_view, name='attendance'),
     path('settings/', views.settings_view, name='settings'),
     path('logout/', views.logout_view, name='logout'),
+    path('submit_attendance/', views.submit_attendance, name='submit_attendance'),
+    path('facial_recognition/', views.facial_recognition, name='facial_recognition'),
+
+
 ]
