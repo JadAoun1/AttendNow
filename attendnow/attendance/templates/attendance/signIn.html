@@ -1,3 +1,5 @@
+
+
 {% extends 'attendance/base.html' %}
 
 {% block title %}Sign In{% endblock %}
@@ -8,13 +10,16 @@
 <div class="or">OR</div>
 <form method="post">
     {% csrf_token %}
-    <!-- Input for username -->
-    <input type="text" name="username" placeholder="Username" required>
-    <!-- Input for password -->
-    <input type="password" name="password" placeholder="Password" required>
-    <!-- Submit button -->
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+                <div class="form-errors">{{ field.errors }}</div>
+            {% endif %}
+        </div>
+    {% endfor %}
     <button type="submit" class="btn">Log In</button>
 </form>
-<!-- Link to Sign Up page -->
-<p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+<p>Don't have an account? <a href="{% url 'sign_up' %}">Sign Up</a></p>
 {% endblock %}
