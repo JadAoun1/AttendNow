@@ -1,8 +1,20 @@
 {% extends 'attendance/base.html' %}
 
+{% load static %}
+
 {% block title %}Profile{% endblock %}
 
 {% block content %}
 <h1>Your Profile</h1>
-<p>Details about the user's profile.</p>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="grid-container">
+        <img src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'default-profile.png' %}{% endif %}" alt="Profile Picture" style="width: 100px; border-radius: 50%;">
+        <input type="file" name="picture" accept="image/*">
+        <input type="text" name="first_name" placeholder="First Name" value="{{ user.first_name }}" required>
+        <input type="text" name="last_name" placeholder="Last Name" value="{{ user.last_name }}" required>
+        <input type="email" name="email" placeholder="Email" value="{{ user.email }}" required>
+    </div>
+    <button type="submit" class="btn">Update Profile</button>
+</form>
 {% endblock %}

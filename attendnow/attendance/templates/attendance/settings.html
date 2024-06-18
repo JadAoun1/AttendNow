@@ -1,0 +1,21 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<h1>Settings</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="grid-container">
+        <label>
+            <input type="checkbox" name="email_notifications" {% if user.settings.email_notifications %}checked{% endif %}>
+            Email Notifications
+        </label>
+        <label>
+            <input type="checkbox" name="sms_notifications" {% if user.settings.sms_notifications %}checked{% endif %}>
+            SMS Notifications
+        </label>
+    </div>
+    <button type="submit" class="btn">Save Settings</button>
+</form>
+{% endblock %}
