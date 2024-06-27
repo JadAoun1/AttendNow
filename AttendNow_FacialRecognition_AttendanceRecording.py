@@ -14,12 +14,14 @@
 # >> "pip install opencv-python"                                                                                #
 #                                                                                                               #
 
+
 import face_recognition
 import cv2 as cam
 import numpy as np
 import csv
 import os
 from datetime import datetime
+from DataBase import insert_attendance_record, close_connector
 
 faceScanner = cam.VideoCapture(0)
 
@@ -120,16 +122,18 @@ while True:
                 
             # Now we can enter the name in the csv file
             # if the appended name is in the known_faces_names list then we can write the name, and
-            # time of attendance to the csv file
+            # time of attendance to the .csv file
             
             face_names.append(name)
             if name in known_faces_names:
                 if name in entries:
                     # The name is removed to prevent repetition
+                    # Write the entries in the .csv file and return that file to the database
                     entries.remove(name)
                     print("entries:", entries)
                     currentTime = timeNow.strftime("%H:%M:%S")
                     lnwriter.writerow([name, currentTime])
+                    insert_attendance_record(name, currentTime)
                     
         RecOut.write(frame)
         
@@ -148,6 +152,7 @@ while True:
         if cam.waitKey(1) & 0xFF == ord('q'):
             break
     
+close_connector()
 faceScanner.release()
 cam.destroyAllWindows()
 attendanceList.close()
