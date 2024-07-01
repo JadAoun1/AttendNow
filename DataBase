@@ -1,0 +1,32 @@
+from google.cloud.sql.connector import Connector
+import sqlalchemy
+
+# Initialize the connector
+connector = Connector()
+
+def getconn() -> sqlalchemy.engine.Connection:
+    conn = connector.connect(
+        "big-cargo-426000-i0:us-central1:attendnow",
+        "pymysql",
+        user="attendnow",
+        password="AttendNow5969",
+        db="attendnow"
+    )
+    return conn
+
+# Create connection pool
+pool = sqlalchemy.create_engine(
+    "mysql+pymysql://",
+    creator=getconn,
+)
+
+# Function to insert attendance record
+def insert_attendance_record(name, time):
+    insert_stmt = sqlalchemy.text(
+        "INSERT INTO attendance (name, time) VALUES (:name, :time)"
+    )
+    with pool.connect() as db_conn:
+        db_conn.execute(insert_stmt, parameters={"name": name, "time": time})
+
+def close_connector():
+    connector.close()
