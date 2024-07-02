@@ -17,7 +17,6 @@ import numpy as np
 import csv
 import os
 from datetime import datetime
-from DataBase import insert_attendance_record, close_connector
 
 # This is opening the camera
 faceScanner = cam.VideoCapture(0)
@@ -128,7 +127,6 @@ while True:
                 print("entries:", entries)
                 currentTime = timeNow.strftime("%H:%M:%S")
                 lnwriter.writerow([name, currentTime])
-                insert_attendance_record(name, currentTime)
                     
     RecOut.write(frame)
         
@@ -148,7 +146,6 @@ while True:
     if cam.waitKey(1) & 0xFF == ord('q'):
         break
     
-close_connector()
 faceScanner.release()
 cam.destroyAllWindows()
 attendanceList.close()
