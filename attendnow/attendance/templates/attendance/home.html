@@ -3,7 +3,38 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>Welcome to AttendNow</h1>
-<p>AttendNow simplifies attendance tracking through advanced facial recognition technology.</p>
-<a href="{% url 'sign_in' %}" class="btn">Get Started</a>
+<section id="home" class="section">
+    <h1>Welcome to AttendNow</h1>
+    <p>AttendNow simplifies attendance tracking through advanced facial recognition technology.</p>
+    <a href="{% url 'sign_in' %}" class="btn">Get Started</a>
+</section>
+
+<section id="about" class="section">
+    <h1>About AttendNow</h1>
+    <p>AttendNow is an innovative attendance tracking system that leverages facial recognition technology to ensure accurate and efficient attendance management.</p>
+    <h2>How It Works</h2>
+    <p>Our facial recognition system uses advanced algorithms to identify and verify individuals.</p>
+    <h2>The Team</h2>
+    <ul>
+        <li>Gavin Middleton</li>
+        <li>Muhamed El Majzoub</li>
+        <li>Jad Aoun</li>
+    </ul>
+</section>
+
+<section id="get-started" class="section">
+    <h1>Get Started</h1>
+    <p>Ready to streamline your attendance process? Get started with AttendNow today!</p>
+    <a href="{% url 'sign_up' %}" class="btn">Sign Up</a>
+</section>
+
+<section id="contact" class="section">
+    <h1>Contact Us</h1>
+    <p>Have questions or need support? Contact us through the following channels:</p>
+    <ul>
+        <li>Email: support@attendnow.com</li>
+        <li>Phone: +1 234 567 8901</li>
+        <li>Address: 123 AttendNow Street, Tech City</li>
+    </ul>
+</section>
 {% endblock %}
