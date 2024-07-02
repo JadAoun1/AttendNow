@@ -23,24 +23,25 @@ import os
 from datetime import datetime
 from DataBase import insert_attendance_record, close_connector
 
+# This is opening the camera
 faceScanner = cam.VideoCapture(0)
-
 # - Show the current date in the excel spread sheet for when the student/employee clocks into work/class
 timeNow = datetime.now()
 currentDate = timeNow.strftime("%Y-%m-%d")
 
-# Checks to see if the camera is opened or not.
+# Checks to see if the camera can be opened or not.
 if not faceScanner.isOpened():
     print('Cannot open system camera.')
     exit(0)
 
-# directory to the stored images
+# directory to the stored images, and new folder "Videos"
 img_directory = "Pictures"
-
 vid_directory = "Videos"
+
 if not os.path.exists(vid_directory):
     os.makedirs(vid_directory)
 
+# Recording, and file naming for the video recording
 fourcc = cam.VideoWriter_fourcc(*'XVID')
 RecOut = cam.VideoWriter(os.path.join(vid_directory, f'output_{currentDate}.avi'), fourcc, 20.0, (640, 480))
 
@@ -135,6 +136,7 @@ while True:
                     
     RecOut.write(frame)
         
+    # This is the frame around the users face in the frame of the webcam
     for (top, right, bottom, left), name in zip(face_coords, face_names):
         top *= 4
         right *= 4
