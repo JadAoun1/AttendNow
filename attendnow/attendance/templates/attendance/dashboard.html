@@ -1,0 +1,87 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        padding: 20px;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .card h2 {
+        margin-top: 0;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .btn {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="dashboard-container">
+    <h1>Dashboard</h1>
+
+    <div class="card">
+        <h2>Overall Attendance</h2>
+        <p>Total attendance: {{ overall_attendance }}</p>
+    </div>
+
+    <div class="card">
+        <h2>Attendance by Organization</h2>
+        {% for record in attendance_by_class %}
+            <p>{{ record.class_org__name }}: {{ record.total }}</p>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h2>Enrolled Classes/Organizations</h2>
+        <ul>
+            {% for class in classes %}
+                <li>{{ class.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>Submit Attendance</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="grid-container">
+                <select name="class_id">
+                    {% for class in classes %}
+                        <option value="{{ class.id }}">{{ class.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" name="submit_attendance" class="btn">Submit Attendance</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

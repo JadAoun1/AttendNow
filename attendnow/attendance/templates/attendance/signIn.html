@@ -1,25 +1,25 @@
-
-
 {% extends 'attendance/base.html' %}
 
 {% block title %}Sign In{% endblock %}
 
 {% block content %}
-<h1>Sign In</h1>
-<a href="#" class="btn btn-google">Sign in with Google</a>
-<div class="or">OR</div>
-<form method="post">
-    {% csrf_token %}
-    {% for field in form %}
+<div class="form-container">
+    <div class="logo">
+    </div>
+    <h1>Sign In</h1>
+    <form method="post">
+        {% csrf_token %}
         <div class="form-group">
-            {{ field.label_tag }}
-            {{ field }}
-            {% if field.errors %}
-                <div class="form-errors">{{ field.errors }}</div>
-            {% endif %}
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
         </div>
-    {% endfor %}
-    <button type="submit" class="btn">Log In</button>
-</form>
-<p>Don't have an account? <a href="{% url 'sign_up' %}">Sign Up</a></p>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn">Log In</button>
+    </form>
+    <div class="or">OR</div>
+    <a href="#" class="btn btn-google">Sign in with Google</a>
+</div>
 {% endblock %}
