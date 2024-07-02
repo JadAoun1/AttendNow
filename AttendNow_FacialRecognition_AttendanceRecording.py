@@ -1,18 +1,14 @@
 #                                                                                                               #
-# Prototype 1: Facial Recognition Feature for the application AttendNow.                                        #   
+# Prototype 2: Facial recognition, attendance recording, and video recording software for AttendNow             #   
 # Created by Gavin Middleton                                                                                    #
 #                                                                                                               #
 # All the packages needed to be downloaded for the facial recognition software, this includes face_recognition  #
 # opencv-python, cmake, and dlib for python version 3.9.                                                        #
 #                                                                                                               #
-# cmd >> "pip install cmake" >> "pip install face_recognition" >>                                               #
+# cmd >> "pip install cmake==3.25.2" >> "pip install dlib==19.24.2" >> "pip install face_recognition" >>        #
+# "pip install openCV-python"                                                                                   #
 #                                                                                                               #
-#   - (dlib needs python 3.7-3.9;                                                                               #
-#       https://github.com/z-mahmud22/Dlib_Windows_Python3.x/blob/main/dlib-19.22.99-cp39-cp39-win_amd64.whl    #
-#       [download the file for 3.9 in the directory])                                                           #
-#                                                                                                               #
-# >> "pip install opencv-python"                                                                                #
-#                                                                                                               #
+
 
 
 import face_recognition
@@ -21,28 +17,26 @@ import numpy as np
 import csv
 import os
 from datetime import datetime
-from DataBase import insert_attendance_record, close_connector
 
+# This is opening the camera
 faceScanner = cam.VideoCapture(0)
-
 # - Show the current date in the excel spread sheet for when the student/employee clocks into work/class
 timeNow = datetime.now()
 currentDate = timeNow.strftime("%Y-%m-%d")
 
-# Checks to see if the camera is opened or not.
+# Checks to see if the camera can be opened or not.
 if not faceScanner.isOpened():
     print('Cannot open system camera.')
     exit(0)
 
-# directory to the stored images
+# directory to the stored images, and new folder "Videos"
 img_directory = "Pictures"
-if not os.path.exists(img_directory):
-    os.makedirs(img_directory)
-
 vid_directory = "Videos"
+
 if not os.path.exists(vid_directory):
     os.makedirs(vid_directory)
 
+# Recording, and file naming for the video recording
 fourcc = cam.VideoWriter_fourcc(*'XVID')
 RecOut = cam.VideoWriter(os.path.join(vid_directory, f'output_{currentDate}.avi'), fourcc, 20.0, (640, 480))
 
@@ -133,10 +127,10 @@ while True:
                 print("entries:", entries)
                 currentTime = timeNow.strftime("%H:%M:%S")
                 lnwriter.writerow([name, currentTime])
-                insert_attendance_record(name, currentTime)
                     
     RecOut.write(frame)
         
+    # This is the frame around the users face in the frame of the webcam
     for (top, right, bottom, left), name in zip(face_coords, face_names):
         top *= 4
         right *= 4
@@ -152,7 +146,6 @@ while True:
     if cam.waitKey(1) & 0xFF == ord('q'):
         break
     
-close_connector()
 faceScanner.release()
 cam.destroyAllWindows()
 attendanceList.close()
