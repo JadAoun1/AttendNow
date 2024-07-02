@@ -36,8 +36,6 @@ if not faceScanner.isOpened():
 
 # directory to the stored images
 img_directory = "Pictures"
-if not os.path.exists(img_directory):
-    os.makedirs(img_directory)
 
 vid_directory = "Videos"
 if not os.path.exists(vid_directory):
