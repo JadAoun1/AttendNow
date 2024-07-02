@@ -1,18 +1,14 @@
 #                                                                                                               #
-# Prototype 1: Facial Recognition Feature for the application AttendNow.                                        #   
+# Prototype 2: Facial recognition, attendance recording, and video recording software for AttendNow             #   
 # Created by Gavin Middleton                                                                                    #
 #                                                                                                               #
 # All the packages needed to be downloaded for the facial recognition software, this includes face_recognition  #
 # opencv-python, cmake, and dlib for python version 3.9.                                                        #
 #                                                                                                               #
-# cmd >> "pip install cmake" >> "pip install face_recognition" >>                                               #
+# cmd >> "pip install cmake==3.25.2" >> "pip install dlib==19.24.2" >> "pip install face_recognition" >>        #
+# "pip install openCV-python"                                                                                   #
 #                                                                                                               #
-#   - (dlib needs python 3.7-3.9;                                                                               #
-#       https://github.com/z-mahmud22/Dlib_Windows_Python3.x/blob/main/dlib-19.22.99-cp39-cp39-win_amd64.whl    #
-#       [download the file for 3.9 in the directory])                                                           #
-#                                                                                                               #
-# >> "pip install opencv-python"                                                                                #
-#                                                                                                               #
+
 
 
 import face_recognition
