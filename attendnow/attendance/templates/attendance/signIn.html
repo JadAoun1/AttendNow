@@ -1,25 +1,25 @@
 {% extends 'attendance/base.html' %}
 
+{% load static %}
+
 {% block title %}Sign In{% endblock %}
 
 {% block content %}
-<div class="form-container">
-    <div class="logo">
+<div style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 120px); background: white;">
+    <div style="background-color: #002B5B; border-radius: 20px; padding: 40px; text-align: center; width: 400px; color: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+        <img src="{% static 'attendnow/static/AttendNowLogo.png' %}" alt="Logo" style="width: 184px; height: 172px; margin-bottom: 20px;">
+        <h1 style="margin-bottom: 20px; font-size: 2.5em; font-weight: 600;">Sign In</h1>
+        <button style="background: #ffffff; color: #757575; display: inline-flex; align-items: center; justify-content: center; width: calc(100% - 20px); padding: 10px; margin: 20px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 1em; cursor: pointer; font-weight: 600; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">
+            <img src="{% static 'attendnow/static/google_logo.png' %}" alt="Google Logo" style="width: 20px; height: 20px; margin-right: 10px;">
+            Sign in with Google
+        </button>
+        <div style="margin: 20px 0; font-size: 1.2em; font-weight: 600;">---------- OR ----------</div>
+        <input type="text" placeholder="Email/Username" style="width: calc(100% - 20px); padding: 15px; margin: 10px 0; border: none; border-radius: 20px; font-size: 1em; font-weight: 400;">
+        <input type="password" placeholder="Password" style="width: calc(100% - 20px); padding: 15px; margin: 10px 0; border: none; border-radius: 20px; font-size: 1em; font-weight: 400;">
+        <button style="width: calc(100% - 20px); padding: 15px; margin: 20px 0; background: #007ACC; border: none; border-radius: 20px; color: white; font-size: 1em; cursor: pointer; font-weight: 600; box-shadow: 0px 2px 4px rgba(0,0,0,0.2);">Log In</button>
+        <div style="margin-top: 20px; font-size: 1em; font-weight: 400;">
+            Don't have an account? <a href="{% url 'sign_up' %}" style="color: white; text-decoration: none; font-weight: 600;">Sign Up</a>
+        </div>
     </div>
-    <h1>Sign In</h1>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn">Log In</button>
-    </form>
-    <div class="or">OR</div>
-    <a href="#" class="btn btn-google">Sign in with Google</a>
 </div>
 {% endblock %}
