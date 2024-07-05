@@ -76,7 +76,7 @@ def attendance_view(request):
 def settings_view(request):
     return render(request, 'attendance/settings.html')
 
-@login_required
+
 def dashboard_view(request):
     return render(request, 'attendance/dashboard.html')
 
