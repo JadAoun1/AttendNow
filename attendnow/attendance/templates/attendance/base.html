@@ -8,27 +8,41 @@
     <link rel="stylesheet" href="{% static 'attendance/styles.css' %}">
 </head>
 <body>
-    <!-- Navbar section -->
-    <div class="navbar">
-        <a href="{% url 'home' %}" class="brand">AttendNow</a>
-        <div class="nav-links">
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'about' %}">About</a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}">Logout</a>
-            {% else %}
-                <a href="{% url 'sign_in' %}">Sign In</a>
-                <a href="{% url 'sign_up' %}">Sign Up</a>
-            {% endif %}
-        </div>
-    </div>
-    <!-- Main content wrapper to center content -->
-    <div class="content-wrapper">
+    <!-- Header section -->
+    <header class="header">
         <div class="container">
-            <img src="{% static 'logo.png' %}" alt="Logo">
-            {% block content %}{% endblock %}
+            <div class="header-content">
+                <span class="logo-text">AttendNow</span>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'profile' %}">Profile</a></li>
+                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                        {% else %}
+                            <li><a href="{% url 'sign_in' %}">Sign In</a></li>
+                            <li><a href="{% url 'sign_up' %}">Sign Up</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
         </div>
+    </header>
+    
+    <!-- Main content wrapper -->
+    <div class="content-wrapper">
+        {% block content %}{% endblock %}
     </div>
+
+    <!-- Footer section -->
+    <footer class="footer">
+        <div class="container">
+            <p>Connect with us: info@attendnow.com</p>
+            <p>Learn more about us on</p>
+            <div class="footer-logo">
+                <span class="footer-logo-text">AttendNow</span>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
