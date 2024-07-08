@@ -41,3 +41,12 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.university_id
+
+
+
+class Attendance(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.full_name} - {self.timestamp}"

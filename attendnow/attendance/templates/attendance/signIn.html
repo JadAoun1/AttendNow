@@ -7,7 +7,6 @@
     <div class="logo">
     </div>
     <h1>Sign In</h1>
-
     <form id="login-form" method="post" onsubmit="handleLogin(event)">
         {% csrf_token %}
         <div class="form-group">
@@ -18,12 +17,10 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
         </div>
-        <button type="submit" class="btn">Log In</button>
+        <button type="submit" class="btn btn-primary btn-lg rounded-pill">Log In</button>
     </form>
-
     <div id="error-message" class="error-message"></div>
-    <div class="or">OR</div>
-    <a href="#" class="btn btn-google">Sign in with Google</a>
+    
 </div>
 
 <script>
@@ -46,12 +43,14 @@ async function handleLogin(event) {
 
     if (response.ok) {
         alert(data.message);
+        // Store the tokens
+        localStorage.setItem('access', data.access);
+        localStorage.setItem('refresh', data.refresh);
         // Redirect or perform further actions
-        window.location.href = '/';  // Redirect to home page or desired page
+        window.location.href = '/attendance';
     } else {
         document.getElementById('error-message').innerText = data.detail || 'Login failed. Please check your credentials.';
     }
 }
 </script>
-
 {% endblock %}
