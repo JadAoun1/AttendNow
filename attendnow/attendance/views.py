@@ -242,7 +242,7 @@ def send_attendance_email():
 
 scheduler = BackgroundScheduler()
 #Use this for testing
-# scheduler.add_job(send_attendance_email, 'interval', minutes=2)
+scheduler.add_job(send_attendance_email, 'interval', minutes=2)
 #Use this to make it send at hour 17
 # scheduler.add_job(send_attendance_email, 'cron', hour=17, minute=0)
 scheduler.start()
