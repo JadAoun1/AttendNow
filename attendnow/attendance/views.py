@@ -8,24 +8,21 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
+def home(request):
+    return render(request, 'attendance/home.html')
+
+def about(request):
+    return render(request, 'attendance/about.html')
+
 def sign_in_view(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, 'Successfully signed in!')
-                return redirect('profile')
-            else:
-                messages.error(request, 'Invalid username or password.')
-        else:
-            messages.error(request, 'Invalid username or password.')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'attendance/signIn.html', {'form': form})
+
+    form = AuthenticationForm()
+    return render(request, 'attendance/SignIn.html', {'form': form})
 
 def sign_up_view(request):
     if request.method == 'POST':
@@ -84,3 +81,155 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'You have successfully logged out.')
     return redirect('home')
+
+
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import User
+from .serializers import UserSerializer
+from django.conf import settings
+import face_recognition
+import boto3
+import os
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import cv2
+from datetime import datetime
+import csv
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+
+s3 = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                  aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                  region_name=settings.AWS_S3_REGION_NAME)
+
+
+class RegisterView(APIView):
+    def post(self, request):
+        data = request.data
+        file = data['photo']
+        path = default_storage.save('tmp/' + file.name, ContentFile(file.read()))
+        tmp_file = os.path.join(settings.MEDIA_ROOT, path)
+
+        s3.upload_file(tmp_file, settings.AWS_STORAGE_BUCKET_NAME, file.name)
+        image_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{file.name}"
+
+        image = face_recognition.load_image_file(tmp_file)
+        face_encoding = face_recognition.face_encodings(image)[0]
+
+        user = User(
+            full_name=data['full_name'],
+            university_id=data['university_id'],
+            password=data['password'],
+            image_url=image_url,
+        )
+        user.set_face_encoding(face_encoding)
+        user.save()
+
+        os.remove(tmp_file)
+
+        return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+
+
+class LoginView(APIView):
+    def post(self, request):
+        university_id = request.data['university_id']
+        password = request.data['password']
+
+        user = get_object_or_404(User, university_id=university_id, password=password)
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            "message": "Login successful",
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }, status=status.HTTP_200_OK)
+
+
+
+class AttendView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        file = request.FILES['photo']
+        path = default_storage.save('tmp/' + file.name, ContentFile(file.read()))
+        tmp_file = os.path.join(settings.MEDIA_ROOT, path)
+
+        image = face_recognition.load_image_file(tmp_file)
+        face_encodings = face_recognition.face_encodings(image)
+
+        if not face_encodings:
+            os.remove(tmp_file)
+            return Response({"message": "No faces detected in the image"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_encoding = user.get_face_encoding()
+        matched = False
+
+        for face_encoding in face_encodings:
+            match = face_recognition.compare_faces([user_encoding], face_encoding)
+            if match[0]:
+                matched = True
+                break
+
+        if matched:
+            filename = f'{datetime.now().strftime("%Y-%m-%d")}.csv'
+            with open(filename, 'a', newline='') as csvfile:
+                csvwriter = csv.writer(csvfile)
+                csvwriter.writerow([user.full_name, datetime.now().strftime("%H:%M:%S")])
+            os.remove(tmp_file)
+            return Response({"message": f"Attendance recorded for {user.full_name}"}, status=status.HTTP_200_OK)
+        else:
+            os.remove(tmp_file)
+            return Response({"message": "Your face was not recognized in the image"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+def send_attendance_email():
+    sender_email = "<YOUR EMAIL>"
+    receiver_email = "<RECEIVER EMAIL>"
+    password = "<YOUR PASSWORD>"
+
+    subject = "Attendance for Today's Class"
+    body = "Hello! Here is the attendance of the class for today."
+
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    filename = f'{datetime.now().strftime("%Y-%m-%d")}.csv'
+    attachment = open(filename, 'rb')
+
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload((attachment).read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', f"attachment; filename= {filename}")
+
+    msg.attach(part)
+    text = msg.as_string()
+
+    with smtplib.SMTP('smtp-mail.outlook.com', 587) as server:
+        server.starttls()
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, text)
+
+
+
+
+scheduler = BackgroundScheduler()
+#Use this for testing
+# scheduler.add_job(send_attendance_email, 'interval', minutes=2)
+#Use this to make it send at hour 17
+# scheduler.add_job(send_attendance_email, 'cron', hour=17, minute=0)
+scheduler.start()
+
+atexit.register(lambda: scheduler.shutdown())
+
