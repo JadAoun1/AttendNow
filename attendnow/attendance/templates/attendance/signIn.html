@@ -7,7 +7,8 @@
     <div class="logo">
     </div>
     <h1>Sign In</h1>
-    <form method="post">
+
+    <form id="login-form" method="post" onsubmit="handleLogin(event)">
         {% csrf_token %}
         <div class="form-group">
             <label for="username">Username:</label>
@@ -19,7 +20,38 @@
         </div>
         <button type="submit" class="btn">Log In</button>
     </form>
+
+    <div id="error-message" class="error-message"></div>
     <div class="or">OR</div>
     <a href="#" class="btn btn-google">Sign in with Google</a>
 </div>
+
+<script>
+async function handleLogin(event) {
+    event.preventDefault();  // Prevent form from submitting the default way
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    const response = await fetch('/api/login/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',  // Include CSRF token
+        },
+        body: JSON.stringify({ university_id: username, password: password })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        alert(data.message);
+        // Redirect or perform further actions
+        window.location.href = '/';  // Redirect to home page or desired page
+    } else {
+        document.getElementById('error-message').innerText = data.detail || 'Login failed. Please check your credentials.';
+    }
+}
+</script>
+
 {% endblock %}

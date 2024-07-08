@@ -1,1 +1,10 @@
-Django>=3.0,<4.0
+Django==3.2.25
+cmake==3.25.2
+dlib==19.24.2
+boto3
+djangorestframework
+face_recognition
+opencv-python==4.9.0.80
+numpy==1.26.4
+djangorestframework-simplejwt
+python-dotenv
