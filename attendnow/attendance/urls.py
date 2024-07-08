@@ -9,6 +9,7 @@ urlpatterns = [
     path('sign_up/', views.sign_up_view, name='sign_up'),
     path('profile/', views.profile_view, name='profile'),
     path('attendance/', views.attendance_view, name='attendance'),
+    path('weekly_attendance/', views.weekly_attendance_view, name='weekly_attendance_view'),
     path('settings/', views.settings_view, name='settings'),
     path('logout/', views.logout_view, name='logout'),
     path('submit_attendance/', views.submit_attendance, name='submit_attendance'),
@@ -17,5 +18,6 @@ urlpatterns = [
     path('api/register/', views.RegisterView.as_view(), name='register'),
     path('api/login/', views.LoginView.as_view(), name='login'),
     path('api/attend/', views.AttendView.as_view(), name='attend'),
+    path('api/weekly_attendance/', views.WeeklyAttendanceView.as_view(), name='weekly_attendance'),
     path('api/', include(jwt_urls)),  # Include JWT URLs under the 'apis/' prefix
 ]

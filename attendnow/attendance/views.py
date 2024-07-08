@@ -6,13 +6,35 @@ from django.http import HttpResponse
 import dlib
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-
+from rest_framework.generics import ListAPIView
+from datetime import timedelta
+from django.utils import timezone
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import User,Attendance
+from .serializers import UserSerializer,AttendanceSerializer
+from django.conf import settings
+import face_recognition
+import boto3
+import os
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import cv2
+from datetime import datetime
+import csv
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 def home(request):
     return render(request, 'attendance/home.html')
 
@@ -65,9 +87,9 @@ def home_view(request):
 def profile_view(request):
     return render(request, 'attendance/profile.html')
 
-@login_required
+
 def attendance_view(request):
-    return render(request, 'attendance/attendance.html')
+    return render(request, 'attendance/attend.html')
 
 @login_required
 def settings_view(request):
@@ -82,27 +104,10 @@ def logout_view(request):
     messages.success(request, 'You have successfully logged out.')
     return redirect('home')
 
+def weekly_attendance_view(request):
+    return render(request, 'attendance/weekly_attendance.html')
 
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import User
-from .serializers import UserSerializer
-from django.conf import settings
-import face_recognition
-import boto3
-import os
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-import cv2
-from datetime import datetime
-import csv
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from email.mime.base import MIMEBase
-from email import encoders
+
 
 s3 = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                   aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
@@ -183,12 +188,23 @@ class AttendView(APIView):
             with open(filename, 'a', newline='') as csvfile:
                 csvwriter = csv.writer(csvfile)
                 csvwriter.writerow([user.full_name, datetime.now().strftime("%H:%M:%S")])
+            # Save attendance record
+            Attendance.objects.create(user=user)
+
             os.remove(tmp_file)
             return Response({"message": f"Attendance recorded for {user.full_name}"}, status=status.HTTP_200_OK)
         else:
             os.remove(tmp_file)
             return Response({"message": "Your face was not recognized in the image"}, status=status.HTTP_401_UNAUTHORIZED)
+class WeeklyAttendanceView(ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = AttendanceSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        one_week_ago = timezone.now() - timedelta(days=7)
+        return Attendance.objects.filter(user=user, timestamp__gte=one_week_ago)
 
 def send_attendance_email():
     sender_email = "<YOUR EMAIL>"
