@@ -37,8 +37,20 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
+<<<<<<< HEAD:attendnow-env/Scripts/activate
 VIRTUAL_ENV="C:\Users\jadao\Desktop\AttendNow-1\attendnow-env"
 export VIRTUAL_ENV
+=======
+# on Windows, a path can contain colons and backslashes and has to be converted:
+if [ "${OSTYPE:-}" = "cygwin" ] || [ "${OSTYPE:-}" = "msys" ] ; then
+    # transform D:\path\to\venv to /d/path/to/venv on MSYS
+    # and to /cygdrive/d/path/to/venv on Cygwin
+    export VIRTUAL_ENV=$(cygpath "C:\Users\jadao\Desktop\AttendNow-2\venv")
+else
+    # use the path as-is
+    export VIRTUAL_ENV="C:\Users\jadao\Desktop\AttendNow-2\venv"
+fi
+>>>>>>> 2386f06fc549a7dc285de15fef44b81bea686a4f:venv/Scripts/activate
 
 _OLD_VIRTUAL_PATH="$PATH"
 PATH="$VIRTUAL_ENV/Scripts:$PATH"

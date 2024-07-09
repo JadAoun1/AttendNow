@@ -8,7 +8,11 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
+<<<<<<< HEAD:attendnow-env/Scripts/activate.bat
 set VIRTUAL_ENV=C:\Users\jadao\Desktop\AttendNow-1\attendnow-env
+=======
+set VIRTUAL_ENV=C:\Users\jadao\Desktop\AttendNow-2\venv
+>>>>>>> 2386f06fc549a7dc285de15fef44b81bea686a4f:venv/Scripts/activate.bat
 
 if not defined PROMPT set PROMPT=$P$G
 
