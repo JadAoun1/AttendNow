@@ -5,6 +5,7 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
 <div style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 120px); background: white;">
     <div style="background-color: #002B5B; border-radius: 20px; padding: 40px; text-align: center; width: 600px; color: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
         <img src="{% static 'attendnow/static/AttendNowLogo.png' %}" alt="Logo" style="width: 184px; height: 172px; margin-bottom: 20px;">
@@ -26,5 +27,67 @@
             Already have an account? <a href="{% url 'sign_in' %}" style="color: white; text-decoration: none; font-weight: 600;">Sign In</a>
         </div>
     </div>
+=======
+<div class="form-container">
+    <div class="logo">
+    </div>
+    <h1>Sign Up</h1>
+    <form id="register-form" method="post" enctype="multipart/form-data" onsubmit="handleRegister(event)">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" name="full_name" required>
+        </div>
+        <div class="form-group">
+            <label for="university_id">University ID:</label>
+            <input type="text" id="university_id" name="university_id" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="photo">Photo:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required>
+        </div>
+        <button type="submit" class="btn">Register</button>
+    </form>
+    <div id="error-message" class="error-message"></div>
+>>>>>>> 90d8ae8af7782acdbc4da0b5e6fb189f23ddc77d
 </div>
+
+<script>
+async function handleRegister(event) {
+    event.preventDefault();  // Prevent form from submitting the default way
+
+    const full_name = document.getElementById('full_name').value;
+    const university_id = document.getElementById('university_id').value;
+    const password = document.getElementById('password').value;
+    const photo = document.getElementById('photo').files[0];
+
+    const formData = new FormData();
+    formData.append('full_name', full_name);
+    formData.append('university_id', university_id);
+    formData.append('password', password);
+    formData.append('photo', photo);
+
+    const response = await fetch('/api/register/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: formData
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        alert(data.message);
+        // Redirect or perform further actions
+        window.location.href = '/sign_in';
+    } else {
+        document.getElementById('error-message').innerText = data.detail || 'Registration failed. Please check your details.';
+    }
+}
+</script>
 {% endblock %}

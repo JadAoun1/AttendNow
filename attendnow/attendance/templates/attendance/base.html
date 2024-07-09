@@ -7,10 +7,19 @@
     <title>{% block title %}AttendNow{% endblock %}</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     {% load static %}
+<<<<<<< HEAD
+=======
+    <link rel="stylesheet" href="{% static 'attendance/styles.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+>>>>>>> 90d8ae8af7782acdbc4da0b5e6fb189f23ddc77d
 </head>
 
 <body style="background-color: #002B5B; font-family: 'Montserrat', sans-serif; margin: 0;">
     <!-- Header section -->
+<<<<<<< HEAD
     <header style="background: linear-gradient(180deg, #002B5B 0%, #003060 40%, white 100%); padding: 20px;">
         <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
             <span style="color: white; font-size: 1.5em; font-weight: 600;">AttendNow</span>
@@ -27,6 +36,26 @@
                     {% endif %}
                 </ul>
             </nav>
+=======
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <span class="logo-text">AttendNow</span>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'profile' %}">Profile</a></li>
+                            <li><a href="{% url 'weekly_attendance_view' %}">Weekly Attendance</a></li>
+                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                        {% else %}
+                            <li><a href="{% url 'sign_in' %}">Sign In</a></li>
+                            <li><a href="{% url 'sign_up' %}">Sign Up</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+>>>>>>> 90d8ae8af7782acdbc4da0b5e6fb189f23ddc77d
         </div>
     </header>
 
