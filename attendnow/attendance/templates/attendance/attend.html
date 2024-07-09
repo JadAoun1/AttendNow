@@ -1,0 +1,92 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Attend{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="logo">
+    </div>
+    <h1>Attend</h1>
+    <form id="attend-form" method="post" enctype="multipart/form-data" onsubmit="handleAttend(event)">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="photo">Photo:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" style="display:none;">
+            <video id="video" width="320" height="240" autoplay></video>
+            <button type="button" id="capture" class="btn btn-primary btn-lg rounded-pill">Capture Photo</button>
+            <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg rounded-pill">Submit</button>
+    </form>
+    <div id="error-message" class="error-message"></div>
+</div>
+
+<script>
+async function handleAttend(event) {
+    event.preventDefault();  // Prevent form from submitting the default way
+
+    const canvas = document.getElementById('canvas');
+    const photo = canvas.toDataURL('image/png');
+    const blob = dataURItoBlob(photo);
+
+    const formData = new FormData();
+    formData.append('photo', blob, 'attendance_photo.png');
+
+    const response = await fetch('/api/attend/', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access')}`,
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: formData
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        alert(data.message);
+        window.location.href = '/weekly_attendance';
+        // Perform further actions if needed
+    } else {
+        document.getElementById('error-message').innerText = data.detail || 'Attendance submission failed. Please try again.';
+    }
+}
+
+function dataURItoBlob(dataURI) {
+    var byteString = atob(dataURI.split(',')[1]);
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], {type: mimeString});
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureButton = document.getElementById('capture');
+    let stream;
+
+    // Get access to the camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function(mediaStream) {
+        stream = mediaStream;
+        video.srcObject = stream;
+    })
+    .catch(function(err) {
+        console.log("An error occurred: " + err);
+    });
+
+    captureButton.addEventListener('click', function() {
+        const context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, 320, 240);
+        video.pause();
+        stream.getTracks().forEach(track => track.stop());
+        canvas.style.display = 'block';
+        video.style.display = 'none';
+    });
+});
+</script>
+{% endblock %}

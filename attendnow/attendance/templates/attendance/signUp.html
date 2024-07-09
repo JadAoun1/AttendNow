@@ -7,55 +7,61 @@
     <div class="logo">
     </div>
     <h1>Sign Up</h1>
-    <form method="post">
+    <form id="register-form" method="post" enctype="multipart/form-data" onsubmit="handleRegister(event)">
         {% csrf_token %}
-        <div class="grid-container">
-            <div class="form-group">
-                {{ form.first_name.label_tag }}
-                {{ form.first_name }}
-                {% if form.first_name.errors %}
-                    <div class="form-errors">{{ form.first_name.errors }}</div>
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.last_name.label_tag }}
-                {{ form.last_name }}
-                {% if form.last_name.errors %}
-                    <div class="form-errors">{{ form.last_name.errors }}</div>
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.email.label_tag }}
-                {{ form.email }}
-                {% if form.email.errors %}
-                    <div class="form-errors">{{ form.email.errors }}</div>
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.username.label_tag }}
-                {{ form.username }}
-                {% if form.username.errors %}
-                    <div class="form-errors">{{ form.username.errors }}</div>
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.password1.label_tag }}
-                {{ form.password1 }}
-                {% if form.password1.errors %}
-                    <div class="form-errors">{{ form.password1.errors }}</div>
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.password2.label_tag }}
-                {{ form.password2 }}
-                {% if form.password2.errors %}
-                    <div class="form-errors">{{ form.password2.errors }}</div>
-                {% endif %}
-            </div>
+        <div class="form-group">
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" name="full_name" required>
         </div>
-        <button type="submit" class="btn">Create Account</button>
+        <div class="form-group">
+            <label for="university_id">University ID:</label>
+            <input type="text" id="university_id" name="university_id" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="photo">Photo:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required>
+        </div>
+        <button type="submit" class="btn">Register</button>
     </form>
-    <div class="or">OR</div>
-    <a href="#" class="btn btn-google">Sign in with Google</a>
+    <div id="error-message" class="error-message"></div>
 </div>
+
+<script>
+async function handleRegister(event) {
+    event.preventDefault();  // Prevent form from submitting the default way
+
+    const full_name = document.getElementById('full_name').value;
+    const university_id = document.getElementById('university_id').value;
+    const password = document.getElementById('password').value;
+    const photo = document.getElementById('photo').files[0];
+
+    const formData = new FormData();
+    formData.append('full_name', full_name);
+    formData.append('university_id', university_id);
+    formData.append('password', password);
+    formData.append('photo', photo);
+
+    const response = await fetch('/api/register/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: formData
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        alert(data.message);
+        // Redirect or perform further actions
+        window.location.href = '/sign_in';
+    } else {
+        document.getElementById('error-message').innerText = data.detail || 'Registration failed. Please check your details.';
+    }
+}
+</script>
 {% endblock %}
