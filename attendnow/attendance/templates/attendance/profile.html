@@ -83,7 +83,7 @@
         {% endif %}
     </div>
 
-    <button id="edit-profile-btn" class="btn">Edit Profile</button>
+    <button id="edit-profile-btn" class="btn btn-primary btn-lg rounded-pill">Edit Profile</button>
 
     <form id="update-profile-form" class="card hidden" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -93,7 +93,7 @@
             <input type="text" name="last_name" placeholder="Last Name" value="{{ user.last_name }}" required>
             <input type="email" name="email" placeholder="Email" value="{{ user.email }}" required>
         </div>
-        <button type="submit" class="btn">Update Profile</button>
+        <button type="submit" class="btn btn-primary btn-lg rounded-pill">Update Profile</button>
     </form>
 
     <div class="card">
@@ -103,7 +103,7 @@
             <div class="grid-container">
                 {{ add_class_form.name }}
             </div>
-            <button type="submit" name="add_class_organization" class="btn">Add</button>
+            <button type="submit" name="add_class_organization" class="btn btn-primary btn-lg rounded-pill">Add</button>
         </form>
     </div>
 </div>
