@@ -21,26 +21,7 @@
             Don't have an account? <a href="{% url 'sign_up' %}" style="color: white; text-decoration: none; font-weight: 600;">Sign Up</a>
         </div>
     </div>
-<<<<<<< HEAD
-=======
-    <h1>Sign In</h1>
-    <form id="login-form" method="post" onsubmit="handleLogin(event)">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary btn-lg rounded-pill">Log In</button>
-    </form>
-    <div id="error-message" class="error-message"></div>
-    
->>>>>>> 90d8ae8af7782acdbc4da0b5e6fb189f23ddc77d
-</div>
-
+  
 <script>
 async function handleLogin(event) {
     event.preventDefault();  // Prevent form from submitting the default way
