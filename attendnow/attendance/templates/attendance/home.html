@@ -3,60 +3,67 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<section id="home" class="section">
-    <h1>Welcome to AttendNow</h1>
-    <p>AttendNow simplifies attendance tracking through advanced facial recognition technology.</p>
-    <a href="{% url 'sign_in' %}" class="btn btn-primary btn-lg rounded-pill">Get Started</a>
-</section>
+<div class="container" style="background: white; padding: 20px;">
 
-<div style="background: linear-gradient(to bottom, white 10%, #002B5B 90%); height: 40px;"></div>
-
-<section id="about" class="section" style="padding: 60px 40px; text-align: center; background: #002B5B; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-    <h1 style="font-size: 2.5em; font-weight: 700; margin-bottom: 20px;">About AttendNow</h1>
-    <p style="font-size: 1.2em; margin-bottom: 20px;">AttendNow is an innovative attendance tracking system that leverages facial recognition technology to ensure accurate and efficient attendance management.</p>
-    <h2 style="font-size: 2em; font-weight: 600; margin-bottom: 20px;">How It Works</h2>
-    <p style="font-size: 1.2em; margin-bottom: 40px;">Our facial recognition system uses advanced algorithms to identify and verify individuals, making attendance tracking seamless and reliable.</p>
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 20px;">
-        <div style="flex: 1 1 calc(33% - 20px); padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <h3 style="font-size: 1.5em; font-weight: 600; margin-bottom: 10px;">High Accuracy</h3>
-            <p style="font-size: 1em;">Our system provides high accuracy in identifying individuals, minimizing errors and ensuring reliable attendance records.</p>
+    <section id="home" class="section" style="padding: 20px; background: white;">
+        <div class="card" style="box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px;">
+            <h1>Welcome to AttendNow</h1>
+            <p>AttendNow simplifies attendance tracking through advanced facial recognition technology.</p>
+            <a href="{% url 'sign_in' %}" class="btn btn-primary btn-lg rounded-pill">Get Started</a>
         </div>
-        <div style="flex: 1 1 calc(33% - 20px); padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <h3 style="font-size: 1.5em; font-weight: 600; margin-bottom: 10px;">Easy Integration</h3>
-            <p style="font-size: 1em;">AttendNow integrates easily with existing systems, making it simple to adopt and implement.</p>
+    </section>
+
+    <section id="about" class="section" style="padding: 20px; background: white;">
+        <div class="card" style="box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px;">
+            <h1 style="font-size: 2.5em; font-weight: 700; margin-bottom: 20px;">About AttendNow</h1>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">AttendNow is an innovative attendance tracking system that leverages facial recognition technology to ensure accurate and efficient attendance management.</p>
+            <h2 style="font-size: 2em; font-weight: 600; margin-bottom: 20px;">How It Works</h2>
+            <p style="font-size: 1.2em; margin-bottom: 40px;">Our facial recognition system uses advanced algorithms to identify and verify individuals, making attendance tracking seamless and reliable.</p>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 20px;">
+                <div style="flex: 1 1 calc(33% - 20px); padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="font-size: 1.5em; font-weight: 600; margin-bottom: 10px;">High Accuracy</h3>
+                    <p style="font-size: 1em;">Our system provides high accuracy in identifying individuals, minimizing errors and ensuring reliable attendance records.</p>
+                </div>
+                <div style="flex: 1 1 calc(33% - 20px); padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="font-size: 1.5em; font-weight: 600; margin-bottom: 10px;">Easy Integration</h3>
+                    <p style="font-size: 1em;">AttendNow integrates easily with existing systems, making it simple to adopt and implement.</p>
+                </div>
+                <div style="flex: 1 1 calc(33% - 20px); padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="font-size: 1.5em; font-weight: 600; margin-bottom: 10px;">Secure Data</h3>
+                    <p style="font-size: 1em;">We prioritize data security, ensuring that all attendance data is stored securely and access is restricted to authorized personnel only.</p>
+                </div>
+            </div>
         </div>
-        <div style="flex: 1 1 calc(33% - 20px); padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <h3 style="font-size: 1.5em; font-weight: 600; margin-bottom: 10px;">Secure Data</h3>
-            <p style="font-size: 1em;">We prioritize data security, ensuring that all attendance data is stored securely and access is restricted to authorized personnel only.</p>
+    </section>
+
+    <section id="the-team" class="section" style="padding: 20px; background: white;">
+        <div class="card" style="box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px;">
+            <h1 style="font-size: 2.5em; font-weight: 700; margin-bottom: 20px;">The Team</h1>
+            <ul style="list-style: none; padding: 0; font-size: 1.2em;">
+                <li style="margin-bottom: 10px;">Gavin Middleton - Backend Developer</li>
+                <li style="margin-bottom: 10px;">Muhamed El Majzoub - Backend Developer</li>
+                <li>Jad Aoun - Frontend Developer</li>
+            </ul>
         </div>
-    </div>
-</section>
+    </section>
 
-<div style="background: linear-gradient(to bottom, #002B5B 10%, #F0F0F0 90%); height: 40px;"></div>
+    <section id="get-started" class="section" style="padding: 20px; background: white;">
+        <div class="card" style="box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px;">
+            <h1>Get Started</h1>
+            <p>Ready to streamline your attendance process? Get started with AttendNow today and experience the convenience and efficiency of advanced facial recognition technology.</p>
+            <a href="{% url 'sign_up' %}" class="btn btn-primary btn-lg rounded-pill">Sign Up</a>
+        </div>
+    </section>
 
-<section id="the-team" class="section" style="padding: 60px 40px; text-align: center; background: #F0F0F0; color: #333; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-    <h1 style="font-size: 2.5em; font-weight: 700; margin-bottom: 20px;">The Team</h1>
-    <ul style="list-style: none; padding: 0; font-size: 1.2em;">
-        <li style="margin-bottom: 10px;">Gavin Middleton - Backend Developer</li>
-        <li style="margin-bottom: 10px;">Muhamed El Majzoub - Backend Developer</li>
-        <li>Jad Aoun - Frontend Developer</li>
-    </ul>
-</section>
+    <section id="contact" class="section" style="padding: 20px; background: white;">
+        <div class="card" style="box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px;">
+            <h1 style="font-size: 2.5em; font-weight: 700; margin-bottom: 20px;">Contact Us</h1>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">Have questions or need support? Contact us through the following channels:</p>
+            <ul style="list-style: none; padding: 0; font-size: 1.2em;">
+                <li style="margin-bottom: 10px;">Email: <a href="mailto:support@attendnow.com" style="color: #007ACC; text-decoration: none;">support@attendnow.com</a></li>
+            </ul>
+        </div>
+    </section>
 
-<section id="get-started" class="section">
-    <h1>Get Started</h1>
-    <p>Ready to streamline your attendance process? Get started with AttendNow today and experience the convenience and efficiency of advanced facial recognition technology.</p>
-    <a href="{% url 'sign_up' %}" class="btn btn-primary btn-lg rounded-pill">Sign Up</a>
-</section>
-
-<div style="background: linear-gradient(to bottom, #002B5B 10%, white 90%); height: 40px;"></div>
-
-<section id="contact" class="section" style="padding: 60px 40px; text-align: center; background: white; color: #333; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-    <h1 style="font-size: 2.5em; font-weight: 700; margin-bottom: 20px;">Contact Us</h1>
-    <p style="font-size: 1.2em; margin-bottom: 20px;">Have questions or need support? Contact us through the following channels:</p>
-    <ul style="list-style: none; padding: 0; font-size: 1.2em;">
-        <li style="margin-bottom: 10px;">Email: <a href="mailto:support@attendnow.com" style="color: #007ACC; text-decoration: none;">support@attendnow.com</a></li>
-    </ul>
-</section>
-
+</div>
 {% endblock %}

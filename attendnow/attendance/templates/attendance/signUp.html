@@ -16,6 +16,15 @@
             <input type="email" placeholder="Email Address" required style="width: calc(100% - 20px); padding: 12px 10px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
             <input type="password" placeholder="Password" required style="width: calc(100% - 20px); padding: 12px 10px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
             <input type="password" placeholder="Confirm Password" required style="width: calc(100% - 20px); padding: 12px 10px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            <select name="role" id="role-select" required onchange="checkRole()" style="width: calc(100% - 20px); padding: 12px 10px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+                <option value="" disabled selected>Select your role</option>
+                <option value="student">Student</option>
+                <option value="employee">Employee</option>
+                <option value="admin">Admin</option>
+            </select>
+            <div id="org-code-container" style="display: none; margin-top: 10px;">
+                <input type="text" id="org-code" name="org_code" placeholder="Enter Organization Code" style="width: calc(100% - 20px); padding: 12px 10px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
             <div style="text-align: left; font-size: 14px; margin-top: 20px;">
                 <input type="checkbox" required style="margin-right: 10px;">
                 I agree to the Terms & Conditions and Privacy Policy set out by this site.
@@ -32,39 +41,54 @@
     </div>
 </div>
 
-
 <script>
-async function handleRegister(event) {
-    event.preventDefault();  // Prevent form from submitting the default way
-
-    const full_name = document.getElementById('full_name').value;
-    const university_id = document.getElementById('university_id').value;
-    const password = document.getElementById('password').value;
-    const photo = document.getElementById('photo').files[0];
-
-    const formData = new FormData();
-    formData.append('full_name', full_name);
-    formData.append('university_id', university_id);
-    formData.append('password', password);
-    formData.append('photo', photo);
-
-    const response = await fetch('/api/register/', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-        },
-        body: formData
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-        alert(data.message);
-        // Redirect or perform further actions
-        window.location.href = '/sign_in';
-    } else {
-        document.getElementById('error-message').innerText = data.detail || 'Registration failed. Please check your details.';
+    function checkRole() {
+        var selectedRole = document.getElementById('role-select').value;
+        var orgCodeContainer = document.getElementById('org-code-container');
+        if (selectedRole === 'admin') {
+            orgCodeContainer.style.display = 'block';
+        } else {
+            orgCodeContainer.style.display = 'none';
+        }
     }
-}
-</script>
+    
+    async function handleRegister(event) {
+        event.preventDefault();  // Prevent form from submitting the default way
+        
+        const firstName = document.querySelector('[placeholder="First Name"]').value;
+        const lastName = document.querySelector('[placeholder="Last Name"]').value;
+        const email = document.querySelector('[placeholder="Email Address"]').value;
+        const password = document.querySelector('[placeholder="Password"]').value;
+        const confirmPassword = document.querySelector('[placeholder="Confirm Password"]').value;
+        const role = document.getElementById('role-select').value;
+        const orgCode = (role === 'admin') ? document.getElementById('org-code').value : '';
+    
+        const formData = new FormData();
+        formData.append('first_name', firstName);
+        formData.append('last_name', lastName);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('confirm_password', confirmPassword);
+        formData.append('role', role);
+        if (orgCode) formData.append('org_code', orgCode);
+    
+        const response = await fetch('/api/register/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData
+        });
+    
+        const data = await response.json();
+    
+        if (response.ok) {
+            alert(data.message);
+            window.location.href = '/sign_in';
+        } else {
+            document.getElementById('error-message').innerText = data.detail || 'Registration failed. Please check your details.';
+        }
+    }
+    </script>
+
 {% endblock %}
