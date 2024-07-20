@@ -4,8 +4,9 @@ dlib==19.24.2
 boto3
 djangorestframework
 face_recognition
+git+https://github.com/ageitgey/face_recognition_models
 opencv-python==4.9.0.80
 numpy==1.26.4
 djangorestframework-simplejwt
 python-dotenv
-
+django-apscheduler

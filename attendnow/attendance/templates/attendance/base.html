@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AttendNow{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     {% load static %}
     <link rel="stylesheet" href="{% static 'attendance/styles.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-<body>
+
+<body style="background-color: white; font-family: 'Montserrat', sans-serif; margin: 0;">
     <!-- Header section -->
-    <header class="header">
+    <header class="header" style="background-color: #001A2F; color: white; padding: 20px;">
         <div class="container">
             <div class="header-content">
-                <span class="logo-text">AttendNow</span>
+                <img src="{% static 'AttendNowLogo.png' %}" alt="Logo" style="width: 100px; height: auto; margin-bottom: 20px;">
+
                 <nav class="nav">
                     <ul>
-                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'home' %}" style="color: white;">Home</a></li>
                         {% if user.is_authenticated %}
-                            <li><a href="{% url 'profile' %}">Profile</a></li>
-                            <li><a href="{% url 'weekly_attendance_view' %}">Weekly Attendance</a></li>
-                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                            <li><a href="{% url 'profile' %}" style="color: white;">Profile</a></li>
+                            <li><a href="{% url 'weekly_attendance_view' %}" style="color: white;">Weekly Attendance</a></li>
+                            <li><a href="{% url 'logout' %}" style="color: white;">Logout</a></li>
                         {% else %}
-                            <li><a href="{% url 'sign_in' %}">Sign In</a></li>
-                            <li><a href="{% url 'sign_up' %}">Sign Up</a></li>
+                            <li><a href="{% url 'sign_in' %}" style="color: white;">Sign In</a></li>
+                            <li><a href="{% url 'sign_up' %}" style="color: white;">Sign Up</a></li>
                         {% endif %}
                     </ul>
                 </nav>
@@ -35,19 +40,29 @@
     </header>
 
     <!-- Main content wrapper -->
-    <div class="content-wrapper">
+    <div class="container content-wrapper" style="min-height: calc(100vh - 160px);">
         {% block content %}{% endblock %}
     </div>
 
     <!-- Footer section -->
-    <footer class="footer">
-        <div class="container">
-            <p>Connect with us: info@attendnow.com</p>
-            <p>Learn more about us on</p>
-            <div class="footer-logo">
-                <span class="footer-logo-text">AttendNow</span>
+    <footer style="background-color: #001A2F; color: white; padding: 20px;">
+        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+            <p>&copy; 2024 AttendNow. All rights reserved.</p>
+            <p>
+                <a href="#" style="color: #00AEEF; text-decoration: none;">Privacy Policy</a> |
+                <a href="#" style="color: #00AEEF; text-decoration: none;">Terms of Service</a>
+            </p>
+            <div style="margin-top: 10px;">
+                <img src="{% static 'AttendNowLogo.png' %}" alt="Logo" style="width: 100px; height: auto; margin-bottom: 20px;">
             </div>
+            <p style="margin-top: 10px;">Connect with us: <a href="mailto:info@attendnow.com" style="color: #00AEEF; text-decoration: none;">info@attendnow.com</a></p>
+            <p>Follow us on:
+                <a href="#" style="color: #00AEEF; text-decoration: none;"><i class="fab fa-facebook"></i></a>
+                <a href="#" style="color: #00AEEF; text-decoration: none;"><i class="fab fa-twitter"></i></a>
+                <a href="#" style="color: #00AEEF; text-decoration: none;"><i class="fab fa-linkedin"></i></a>
+            </p>
         </div>
     </footer>
 </body>
+
 </html>
