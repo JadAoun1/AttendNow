@@ -1,134 +1,31 @@
 {% extends 'attendance/base.html' %}
 
+{% load static %}
+
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<style>
-    .dashboard-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 40px 20px;
-        background-color: #F4F4F9; /* Light Gray */
-    }
-
-    .card {
-        background-color: #FFFFFF; /* White */
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin: 20px;
-        padding: 20px;
-        width: 100%;
-        max-width: 600px;
-        text-align: center;
-        border: 1px solid #e0e0e0;
-    }
-
-    .card h2 {
-        margin-top: 0;
-        color: #003366; /* Dark Blue */
-    }
-
-    .card p, .card ul {
-        color: #333;
-        font-size: 18px;
-        margin-bottom: 20px;
-    }
-
-    .card ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .card ul li {
-        margin-bottom: 10px;
-    }
-
-    .grid-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 20px;
-        align-items: center;
-        margin-top: 20px;
-    }
-
-    select {
-        padding: 10px;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        font-size: 16px;
-        width: 100%;
-    }
-
-    .btn {
-        background-color: #003366; /* Dark Blue */
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 4px;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-    .btn:hover {
-        background-color: #00AEEF; /* Light Blue */
-        color: #003366; /* Dark Blue */
-    }
-</style>
-
-<div class="dashboard-container">
-    <h1>Dashboard</h1>
-
-    <div class="card">
-        <h2>Overall Attendance</h2>
-        <p>Total attendance: {{ overall_attendance }}</p>
-    </div>
-
-    <div class="card">
-        <h2>Attendance by Organization</h2>
-        {% for record in attendance_by_class %}
-            <p>{{ record.class_org__name }}: {{ record.total }}</p>
-        {% endfor %}
-    </div>
-
-    <div class="card">
-        <h2>Enrolled Classes/Organizations</h2>
-        <ul>
-            {% for class in classes %}
-                <li>{{ class.name }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div class="card">
-        <h2>Submit Attendance</h2>
-        <form method="post">
-            {% csrf_token %}
-            <div class="grid-container">
-                <select name="class_id">
-                    {% for class in classes %}
-                        <option value="{{ class.id }}">{{ class.name }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit" name="submit_attendance" class="btn btn-primary btn-lg rounded-pill">Submit Attendance</button>
-            </div>
-        </form>
-    </div>
-
-    <div class="card">
-        <h2>Add Class/Organization</h2>
-        <form method="post">
-            {% csrf_token %}
-            <div class="grid-container">
-                {{ add_class_form.name }}
-            </div>
-            <button type="submit" name="add_class_organization" class="btn btn-primary btn-lg rounded-pill">Add</button>
-        </form>
-    </div>
+<div style="background-color: #FFFFFF; text-align: center; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-bottom: 30px;">
+    <img src="{% static 'images/profile_image.png' %}" alt="Profile Image" style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 10px;">
+    <div style="font-size: 18px; font-weight: bold; color: #003366;">First Last</div>
+    <div style="font-size: 16px; color: #666; margin-bottom: 20px;">Position</div>
+    <button style="background-color: #007ACC; color: white; border: none; border-radius: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer;">Edit Profile</button>
 </div>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;" onclick="window.location.href='{% url 'attendance' %}'">
+        <img src="{% static 'icons/attendance_icon.png' %}" alt="Attendance" style="width: 60px; height: 60px; margin-bottom: 10px;">
+        <div style="font-size: 16px; color: #003366;">Attendance</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;" onclick="window.location.href='{% url 'settings' %}'">
+        <img src="{% static 'icons/settings_icon.png' %}" alt="Settings" style="width: 60px; height: 60px; margin-bottom: 10px;">
+        <div style="font-size: 16px; color: #003366;">Settings</div>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;" onclick="window.location.href='{% url 'logout' %}'">
+        <img src="{% static 'icons/logout_icon.png' %}" alt="Logout" style="width: 60px; height: 60px; margin-bottom: 10px;">
+        <div style="font-size: 16px; color: #003366;">Logout</div>
+    </div>
+
 </div>
 {% endblock %}

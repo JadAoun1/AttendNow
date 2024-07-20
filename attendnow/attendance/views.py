@@ -84,7 +84,7 @@ def facial_recognition(request):
 def home_view(request):
     return render(request, 'attendance/home.html')
 
-@login_required
+
 def profile_view(request):
     return render(request, 'attendance/profile.html')
 
@@ -92,7 +92,6 @@ def profile_view(request):
 def attendance_view(request):
     return render(request, 'attendance/attend.html')
 
-@login_required
 def settings_view(request):
     return render(request, 'attendance/settings.html')
 
@@ -197,6 +196,8 @@ class AttendView(APIView):
         else:
             os.remove(tmp_file)
             return Response({"message": "Your face was not recognized in the image"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+
 class WeeklyAttendanceView(ListAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
