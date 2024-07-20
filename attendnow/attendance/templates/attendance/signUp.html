@@ -1,49 +1,112 @@
 {% extends 'attendance/base.html' %}
 
+{% load static %}
+
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<div class="form-container">
-    <div class="logo">
+
+<div style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 120px); background: white;">
+    <div style="background-color: #FFFFFF; border-radius: 20px; padding: 40px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+
+        <h1 style="margin-bottom: 20px; font-size: 24px; color: #003366;">Register Account</h1>
+        <form method="post" onsubmit="handleRegister(event)" style="margin-top: 20px;">
+            {% csrf_token %}
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-user" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="text" placeholder="First Name" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-user" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="text" placeholder="Last Name" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-envelope" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="email" placeholder="Email Address" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-lock" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="password" placeholder="Password" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-lock" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="password" placeholder="Confirm Password" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-user-tag" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <select name="role" id="role-select" required onchange="checkRole()" style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="student">Student</option>
+                    <option value="employee">Employee</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div id="org-code-container" style="display: none; margin-bottom: 10px;">
+                <div style="position: relative; width: calc(100% - 20px);">
+                    <i class="fas fa-building" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                    <input type="text" id="org-code" name="org_code" placeholder="Enter Organization Code" style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+                </div>
+            </div>
+            <div id="id-container" style="display: none; margin-bottom: 10px;">
+                <div style="position: relative; width: calc(100% - 20px);">
+                    <i class="fas fa-id-badge" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                    <input type="text" id="id-number" name="id_number" placeholder="Enter ID Number" style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+                </div>
+            </div>
+            <div style="text-align: left; font-size: 14px; margin-top: 20px;">
+                <input type="checkbox" required style="margin-right: 10px;">
+                I agree to the Terms & Conditions and Privacy Policy set out by this site.
+            </div>
+            <button type="submit" style="width: calc(100% - 20px); padding: 15px; margin-top: 20px; background-color: #001A2F; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer;">Register</button>
+            <div style="background-color: transparent; color: #757575; border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-top: 20px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer;">
+                <i class="fab fa-google" style="font-size: 20px; margin-right: 10px;"></i>
+                Continue with Google
+            </div>
+            <div style="font-size: 14px; color: #007ACC; text-align: center; margin-top: 20px;">
+                Already have an account? <a href="{% url 'sign_in' %}" style="color: #007ACC; text-decoration: none; font-weight: 600;">Login</a>
+            </div>
+        </form>
     </div>
-    <h1>Sign Up</h1>
-    <form id="register-form" method="post" enctype="multipart/form-data" onsubmit="handleRegister(event)">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="full_name">Full Name:</label>
-            <input type="text" id="full_name" name="full_name" required>
-        </div>
-        <div class="form-group">
-            <label for="university_id">University ID:</label>
-            <input type="text" id="university_id" name="university_id" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div class="form-group">
-            <label for="photo">Photo:</label>
-            <input type="file" id="photo" name="photo" accept="image/*" required>
-        </div>
-        <button type="submit" class="btn">Register</button>
-    </form>
-    <div id="error-message" class="error-message"></div>
 </div>
 
 <script>
+function checkRole() {
+    const roleSelect = document.getElementById('role-select');
+    const orgCodeContainer = document.getElementById('org-code-container');
+    const idContainer = document.getElementById('id-container');
+    if (roleSelect.value === 'admin') {
+        orgCodeContainer.style.display = 'block';
+        idContainer.style.display = 'none';
+    } else if (roleSelect.value === 'student' || roleSelect.value === 'employee') {
+        orgCodeContainer.style.display = 'none';
+        idContainer.style.display = 'block';
+    } else {
+        orgCodeContainer.style.display = 'none';
+        idContainer.style.display = 'none';
+    }
+}
+
 async function handleRegister(event) {
     event.preventDefault();  // Prevent form from submitting the default way
 
-    const full_name = document.getElementById('full_name').value;
-    const university_id = document.getElementById('university_id').value;
-    const password = document.getElementById('password').value;
-    const photo = document.getElementById('photo').files[0];
+    const firstName = document.querySelector('[placeholder="First Name"]').value;
+    const lastName = document.querySelector('[placeholder="Last Name"]').value;
+    const email = document.querySelector('[placeholder="Email Address"]').value;
+    const password = document.querySelector('[placeholder="Password"]').value;
+    const confirmPassword = document.querySelector('[placeholder="Confirm Password"]').value;
+    const role = document.getElementById('role-select').value;
+    const orgCode = (role === 'admin') ? document.getElementById('org-code').value : '';
+    const idNumber = (role === 'student' || role === 'employee') ? document.getElementById('id-number').value : '';
 
     const formData = new FormData();
-    formData.append('full_name', full_name);
-    formData.append('university_id', university_id);
+    formData.append('first_name', firstName);
+    formData.append('last_name', lastName);
+    formData.append('email', email);
     formData.append('password', password);
-    formData.append('photo', photo);
+    formData.append('confirm_password', confirmPassword);
+    formData.append('role', role);
+    if (orgCode) formData.append('org_code', orgCode);
+    if (idNumber) formData.append('id_number', idNumber);
 
     const response = await fetch('/api/register/', {
         method: 'POST',
@@ -57,11 +120,11 @@ async function handleRegister(event) {
 
     if (response.ok) {
         alert(data.message);
-        // Redirect or perform further actions
         window.location.href = '/sign_in';
     } else {
         document.getElementById('error-message').innerText = data.detail || 'Registration failed. Please check your details.';
     }
 }
 </script>
+
 {% endblock %}
