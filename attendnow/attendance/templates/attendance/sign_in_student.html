@@ -1,0 +1,56 @@
+{% extends 'attendance/base.html' %}
+
+{% load static %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 120px); background: white;">
+    <div style="background-color: #FFFFFF; border-radius: 20px; padding: 40px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        <img src="{% static 'attendnow/Static/AttendNowLogo.png' %}" alt="Logo" style="width: 184px; height: 172px; margin-bottom: 20px;">
+        <h1 style="margin-bottom: 20px; font-size: 24px; color: #003366;">Student Sign In</h1>
+        <button style="background: #ffffff; color: #757575; display: inline-flex; align-items: center; justify-content: center; width: calc(100% - 20px); padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">
+            <img src="{% static 'attendnow/static/google_logo.png' %}" alt="Google Logo" style="width: 20px; height: 20px; margin-right: 10px;">
+            Sign in with Google
+        </button>
+        <div style="margin-bottom: 20px; font-size: 16px; font-weight: 600;">---------- OR ----------</div>
+        <input type="text" id="username" placeholder="Email/Username" style="width: calc(100% - 20px); padding: 15px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+        <input type="password" id="password" placeholder="Password" style="width: calc(100% - 20px); padding: 15px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+        <button onclick="handleLogin(event)" style="width: calc(100% - 20px); padding: 15px; margin-top: 20px; background-color: #007ACC; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">Log In</button>
+        <div style="margin-top: 20px; font-size: 16px; color: #007ACC;">
+            Don't have an account? <a href="{% url 'sign_up' %}" style="color: #007ACC; text-decoration: none; font-weight: 600;">Sign Up</a>
+        </div>
+    </div>
+</div>
+  
+<script>
+async function handleLogin(event) {
+    event.preventDefault();  // Prevent form from submitting the default way
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    const response = await fetch('/api/login/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',  // Include CSRF token
+        },
+        body: JSON.stringify({ university_id: username, password: password })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        alert(data.message);
+        // Store the tokens
+        localStorage.setItem('access', data.access);
+        localStorage.setItem('refresh', data.refresh);
+        // Redirect or perform further actions
+        window.location.href = '/attendance';
+    } else {
+        document.getElementById('error-message').innerText = data.detail || 'Login failed. Please check your credentials.';
+    }
+}
+</script>
+{% endblock %}
