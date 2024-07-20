@@ -6,26 +6,25 @@
 
 {% block content %}
 <div style="background-color: #FFFFFF; text-align: center; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-bottom: 30px;">
-    <img src="{% static 'images/profile_image.png' %}" alt="Profile Image" style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 10px;">
+    <img src="{% static 'images/profile_image.png' %}" alt="Profile Image" style="width: 120px; height: auto; border-radius: 50%; margin-bottom: 10px;">
     <div style="font-size: 18px; font-weight: bold; color: #003366;">First Last</div>
     <div style="font-size: 16px; color: #666; margin-bottom: 20px;">Position</div>
-    <button style="background-color: #007ACC; color: white; border: none; border-radius: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer;">Edit Profile</button>
+    <button style="background-color: #001A2F; color: white; border: none; border-radius: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer;">Edit Profile</button>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px;">
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;" onclick="window.location.href='{% url 'attendance' %}'">
-        <img src="{% static 'icons/attendance_icon.png' %}" alt="Attendance" style="width: 60px; height: 60px; margin-bottom: 10px;">
-        <div style="font-size: 16px; color: #003366;">Attendance</div>
+        <i class="fas fa-calendar-check" style="font-size: 60px; color: #001A2F; margin-bottom: 10px;"></i>
+        <div style="font-size: 16px; color: #001A2F;">Attendance</div>
     </div>
 
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;" onclick="window.location.href='{% url 'settings' %}'">
-        <img src="{% static 'icons/settings_icon.png' %}" alt="Settings" style="width: 60px; height: 60px; margin-bottom: 10px;">
-        <div style="font-size: 16px; color: #003366;">Settings</div>
+        <i class="fas fa-cog" style="font-size: 60px; color: #001A2F; margin-bottom: 10px;"></i>
+        <div style="font-size: 16px; color: #001A2F;">Settings</div>
     </div>
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;" onclick="window.location.href='{% url 'logout' %}'">
-        <img src="{% static 'icons/logout_icon.png' %}" alt="Logout" style="width: 60px; height: 60px; margin-bottom: 10px;">
-        <div style="font-size: 16px; color: #003366;">Logout</div>
+        <i class="fas fa-sign-out-alt" style="font-size: 60px; color: #001A2F; margin-bottom: 10px;"></i>
+        <div style="font-size: 16px; color: #001A2F;">Logout</div>
     </div>
-
 </div>
 {% endblock %}
