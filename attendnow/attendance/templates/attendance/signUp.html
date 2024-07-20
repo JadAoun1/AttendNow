@@ -5,27 +5,32 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
+
 <div style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 120px); background: white;">
-    <div style="background-color: #002B5B; border-radius: 20px; padding: 40px; text-align: center; width: 600px; color: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
-        <img src="{% static 'attendnow/static/AttendNowLogo.png' %}" alt="Logo" style="width: 184px; height: 172px; margin-bottom: 20px;">
-        <h1 style="margin-bottom: 20px; font-size: 2.5em; font-weight: 600;">Sign Up</h1>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <input type="text" placeholder="First Name" style="padding: 15px; border: none; border-radius: 20px; font-size: 1em; font-weight: 400;">
-            <input type="text" placeholder="Last Name" style="padding: 15px; border: none; border-radius: 20px; font-size: 1em; font-weight: 400;">
-            <input type="email" placeholder="Email" style="padding: 15px; border: none; border-radius: 20px; font-size: 1em; font-weight: 400;">
-            <input type="text" placeholder="Username" style="padding: 15px; border: none; border-radius: 20px; font-size: 1em; font-weight: 400;">
-            <input type="password" placeholder="Password" style="padding: 15px; border: none; border-radius: 20px; font-size: 1em; font-weight: 400;">
-            <input type="password" placeholder="Confirm Password" style="padding: 15px; border: none; border-radius: 20px; font-size: 1em; font-weight: 400;">
-        </div>
-        <button style="width: 100%; padding: 15px; margin: 20px 0; background: #007ACC; border: none; border-radius: 20px; color: white; font-size: 1em; cursor: pointer; font-weight: 600; box-shadow: 0px 2px 4px rgba(0,0,0,0.2);">Create Account</button>
-        <div style="margin: 20px 0; font-size: 1.2em; font-weight: 600;">---------- OR ----------</div>
-        <button style="background: #ffffff; color: #757575; display: inline-flex; align-items: center; justify-content: center; width: calc(100% - 20px); padding: 10px; margin: 20px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 1em; cursor: pointer; font-weight: 600; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">
-            <img src="{% static 'attendnow/static/google_logo.png' %}" alt="Google Logo" style="width: 20px; height: 20px; margin-right: 10px;">
-            Sign in with Google
-        </button>
-            Already have an account? <a href="{% url 'sign_in' %}" style="color: white; text-decoration: none; font-weight: 600;">Sign In</a>
-        </div>
+    <div style="background-color: #FFFFFF; border-radius: 20px; padding: 40px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        <h1 style="margin-bottom: 20px; font-size: 24px; color: #003366;">Register Account to AttendNow</h1>
+        <form method="post" onsubmit="handleRegister(event)" style="margin-top: 20px;">
+            {% csrf_token %}
+            <input type="text" placeholder="First Name" required style="width: calc(100% - 20px); padding: 12px 10px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            <input type="text" placeholder="Last Name" required style="width: calc(100% - 20px); padding: 12px 10px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            <input type="email" placeholder="Email Address" required style="width: calc(100% - 20px); padding: 12px 10px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            <input type="password" placeholder="Password" required style="width: calc(100% - 20px); padding: 12px 10px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            <input type="password" placeholder="Confirm Password" required style="width: calc(100% - 20px); padding: 12px 10px; margin-bottom: 10px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            <div style="text-align: left; font-size: 14px; margin-top: 20px;">
+                <input type="checkbox" required style="margin-right: 10px;">
+                I agree to the Terms & Conditions and Privacy Policy set out by this site.
+            </div>
+            <button type="submit" style="width: calc(100% - 20px); padding: 15px; margin-top: 20px; background-color: #007ACC; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer;">Register</button>
+            <div style="background-color: transparent; color: #757575; border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-top: 20px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer;">
+                <img src="{% static 'attendnow/static/google_logo.png' %}" alt="Google Logo" style="width: 20px; height: 20px; margin-right: 10px;">
+                Continue with Google
+            </div>
+            <div style="font-size: 14px; color: #007ACC; text-align: center; margin-top: 20px;">
+                Already have an account? <a href="{% url 'sign_in' %}" style="color: #007ACC; text-decoration: none; font-weight: 600;">Login</a>
+            </div>
+        </form>
     </div>
+</div>
 
 
 <script>
