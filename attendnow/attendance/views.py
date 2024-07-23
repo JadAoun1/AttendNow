@@ -35,6 +35,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+
 def home(request):
     return render(request, 'attendance/home.html')
 
@@ -83,7 +84,7 @@ def facial_recognition(request):
 def home_view(request):
     return render(request, 'attendance/home.html')
 
-@login_required
+
 def profile_view(request):
     return render(request, 'attendance/profile.html')
 
@@ -91,11 +92,10 @@ def profile_view(request):
 def attendance_view(request):
     return render(request, 'attendance/attend.html')
 
-@login_required
 def settings_view(request):
     return render(request, 'attendance/settings.html')
 
-@login_required
+
 def dashboard_view(request):
     return render(request, 'attendance/dashboard.html')
 
@@ -196,6 +196,8 @@ class AttendView(APIView):
         else:
             os.remove(tmp_file)
             return Response({"message": "Your face was not recognized in the image"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+
 class WeeklyAttendanceView(ListAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -237,6 +239,31 @@ def send_attendance_email():
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, text)
 
+def role_selection(request):
+    # This view renders a page where users can choose their role
+    return render(request, 'attendance/role_selection.html')
+
+def sign_in_student(request):
+    # Adapt this to handle student-specific sign-in logic or just render a template
+    if request.method == 'POST':
+        # Handle student login
+        pass
+    return render(request, 'attendance/sign_in_student.html')
+
+def sign_in_admin(request):
+    # Adapt this to handle admin-specific sign-in logic or just render a template
+    if request.method == 'POST':
+        # Handle admin login
+        pass
+    return render(request, 'attendance/sign_in_admin.html')
+
+def sign_in_student(request):
+    # Handle student-specific login logic or render a student template
+    return render(request, 'attendance/sign_in_student.html')
+
+def sign_in_employee(request):
+    # Handle employee-specific login logic or render an employee template
+    return render(request, 'attendance/sign_in_employee.html')
 
 
 
