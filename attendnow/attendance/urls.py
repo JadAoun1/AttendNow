@@ -20,11 +20,20 @@ urlpatterns = [
     path('api/attend/', views.AttendView.as_view(), name='attend'),
     path('api/weekly_attendance/', views.WeeklyAttendanceView.as_view(), name='weekly_attendance'),
     path('api/', include(jwt_urls)),
-
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('role_selection/', views.role_selection, name='role_selection'),
     path('sign_in/student/', views.sign_in_student, name='sign_in_student'),
     path('sign_in/admin/', views.sign_in_admin, name='sign_in_admin'), 
     path('sign_in/student/', views.sign_in_student, name='sign_in_student'),
     path('sign_in/employee/', views.sign_in_employee, name='sign_in_employee'),
- 
+    path('overall_attendance/', views.overall_attendance, name='overall_attendance'),
+    path('mark_attendance/', views.mark_attendance, name='mark_attendance'),
+    path('add_view_groups/', views.add_view_groups, name='add_view_groups'),
+    path('messages/', views.messages, name='messages'),
+    path('calendar/', views.calendar, name='calendar'),
+    path('activity/', views.activity, name='activity'),
+
 ]
