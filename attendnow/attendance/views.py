@@ -107,6 +107,9 @@ def logout_view(request):
 def weekly_attendance_view(request):
     return render(request, 'attendance/weekly_attendance.html')
 
+def attendance_records(request):
+    return render(request, 'attendance/attendance_records.html')
+
 
 
 s3 = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -139,6 +142,7 @@ class RegisterView(APIView):
         os.remove(tmp_file)
 
         return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+
 
 
 class LoginView(APIView):
@@ -265,6 +269,57 @@ def sign_in_employee(request):
     # Handle employee-specific login logic or render an employee template
     return render(request, 'attendance/sign_in_employee.html')
 
+
+def add_view_groups(request):
+    return render(request, 'attendance/add_view_groups.html')
+
+
+def messages(request):
+    return render(request, 'attendance/messages.html')
+
+def calendar(request):
+    return render(request, 'attendance/calendar.html')
+
+
+def activity(request):
+    return render(request, 'attendance/activity.html')
+
+
+def overall_attendance(request):
+    return render(request, 'attendance/overall_attendance.html')
+
+def mark_attendance(request):
+    return render(request, 'attendance/mark_attendance.html')
+
+@login_required
+def account_settings(request):
+    # Handle account settings logic here
+    return render(request, 'settings/account_settings.html')
+
+@login_required
+def notifications(request):
+    # Handle notification settings logic here
+    return render(request, 'settings/notifications.html')
+
+@login_required
+def password_reset(request):
+    # Handle password reset logic here
+    return render(request, 'settings/password_reset.html')
+
+@login_required
+def app_settings(request):
+    # Handle app specific settings logic here
+    return render(request, 'settings/app_settings.html')
+
+@login_required
+def privacy_settings(request):
+    # Handle privacy related settings here
+    return render(request, 'settings/privacy_settings.html')
+
+@login_required
+def contact_support(request):
+    # Handle support contact logic here
+    return render(request, 'settings/contact_support.html')
 
 
 scheduler = BackgroundScheduler()

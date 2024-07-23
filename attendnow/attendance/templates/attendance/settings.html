@@ -1,21 +1,53 @@
 {% extends 'attendance/base.html' %}
 
+{% load static %}
+
 {% block title %}Settings{% endblock %}
 
 {% block content %}
-<h1>Settings</h1>
-<form method="post">
-    {% csrf_token %}
-    <div class="grid-container">
-        <label>
-            <input type="checkbox" name="email_notifications" {% if user.settings.email_notifications %}checked{% endif %}>
-            Email Notifications
-        </label>
-        <label>
-            <input type="checkbox" name="sms_notifications" {% if user.settings.sms_notifications %}checked{% endif %}>
-            SMS Notifications
-        </label>
+
+
+<div style="background-color: white; padding: 40px; text-align: center; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; min-height: 100vh;">
+    <!-- Account Settings -->
+    <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px; padding: 40px; text-align: center; width: 250px; height: 250px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="location.href='{% url 'account_settings' %}'">
+        <i class="fas fa-user-circle" style="font-size: 60px; color: #001A2F;"></i>
+        <p style="font-size: 18px; color: #001A2F; margin-top: 20px;">Account Settings</p>
     </div>
-    <button type="submit" class="btn">Save Settings</button>
-</form>
+    <!-- Notifications -->
+    <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px; padding: 40px; text-align: center; width: 250px; height: 250px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="location.href='{% url 'notifications' %}'">
+        <i class="fas fa-bell" style="font-size: 60px; color: #001A2F;"></i>
+        <p style="font-size: 18px; color: #001A2F; margin-top: 20px;">Notifications</p>
+    </div>
+    <!-- Forgot Password -->
+    <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px; padding: 40px; text-align: center; width: 250px; height: 250px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; " onclick="location.href='{% url 'forgot_password' %}'">
+        <i class="fas fa-key" style="font-size: 60px; color: #001A2F;"></i>
+        <p style="font-size: 18px; color: #001A2F; margin-top: 20px;">Forgot Password</p>
+    </div>
+    <!-- App Settings -->
+    <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px; padding: 40px; text-align: center; width: 250px; height: 250px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: -500px;" onclick="location.href='{% url 'app_settings' %}'">
+        <i class="fas fa-cogs" style="font-size: 60px; color: #001A2F;"></i>
+        <p style="font-size: 18px; color: #001A2F; margin-top: 20px;">App Settings</p>
+    </div>
+    <!-- Privacy Settings -->
+    <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px; padding: 40px; text-align: center; width: 250px; height: 250px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: -500px;" onclick="location.href='{% url 'privacy_settings' %}'">
+        <i class="fas fa-lock" style="font-size: 60px; color: #001A2F;"></i>
+        <p style="font-size: 18px; color: #001A2F; margin-top: 20px;">Privacy Settings</p>
+    </div>
+    <!-- Contact Support -->
+    <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px; padding: 40px; text-align: center; width: 250px; height: 250px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: -500px; " onclick="location.href='{% url 'contact_support' %}'">
+        <i class="fas fa-question-circle" style="font-size: 60px; color: #001A2F;"></i>
+        <p style="font-size: 18px; color: #001A2F; margin-top: 20px;">Contact Support</p>
+    </div>
+</div>
+
+<script>
+function toggleSection(sectionId) {
+    var section = document.getElementById(sectionId);
+    if (section.style.display === 'none' || section.style.display === '') {
+        section.style.display = 'block';
+    } else {
+        section.style.display = 'none';
+    }
+}
+</script>
 {% endblock %}
