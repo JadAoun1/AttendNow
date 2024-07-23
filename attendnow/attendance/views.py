@@ -266,6 +266,27 @@ def sign_in_employee(request):
     return render(request, 'attendance/sign_in_employee.html')
 
 
+def add_view_groups(request):
+    return render(request, 'attendance/add_view_groups.html')
+
+
+def messages(request):
+    return render(request, 'attendance/messages.html')
+
+def calendar(request):
+    return render(request, 'attendance/calendar.html')
+
+
+def activity(request):
+    return render(request, 'attendance/activity.html')
+
+
+def overall_attendance(request):
+    return render(request, 'attendance/overall_attendance.html')
+
+def mark_attendance(request):
+    return render(request, 'attendance/mark_attendance.html')
+
 
 scheduler = BackgroundScheduler()
 #Use this for testing

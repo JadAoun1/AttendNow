@@ -3,19 +3,62 @@
 {% block title %}Settings{% endblock %}
 
 {% block content %}
-<h1>Settings</h1>
-<form method="post">
-    {% csrf_token %}
-    <div class="grid-container">
-        <label>
-            <input type="checkbox" name="email_notifications" {% if user.settings.email_notifications %}checked{% endif %}>
-            Email Notifications
-        </label>
-        <label>
-            <input type="checkbox" name="sms_notifications" {% if user.settings.sms_notifications %}checked{% endif %}>
-            SMS Notifications
-        </label>
+<div style="background-color: #FFFFFF; padding: 40px; border-radius: 20px; text-align: center; width: 100%; max-width: 600px; margin: 40px auto; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+    <h1 style="margin-bottom: 20px; font-size: 24px; color: #003366;">Settings</h1>
+    
+    <div class="section" onclick="toggleSection('info-section')" style="cursor: pointer; margin-bottom: 20px;">
+        <h2 style="font-size: 20px; color: #003366;">User Information</h2>
+        <div id="info-section" style="display: none;">
+            {% if user.is_authenticated %}
+            <p style="font-size: 16px; color: #666;">Email: {{ user.email }}</p>
+            <p style="font-size: 16px; color: #666;">Username: {{ user.username }}</p>
+            {% endif %}
+        </div>
     </div>
-    <button type="submit" class="btn">Save Settings</button>
-</form>
+
+    <div class="section" onclick="toggleSection('notification-section')" style="cursor: pointer; margin-bottom: 20px;">
+        <h2 style="font-size: 20px; color: #003366;">Notifications</h2>
+        <div id="notification-section" style="display: none;">
+            <form method="post" style="margin-top: 20px;">
+                {% csrf_token %}
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <label style="margin-bottom: 10px;">
+                        <input type="checkbox" name="email_notifications" {% if user.settings.email_notifications %}checked{% endif %} style="margin-right: 10px;">
+                        Email Notifications
+                    </label>
+                    <label>
+                        <input type="checkbox" name="sms_notifications" {% if user.settings.sms_notifications %}checked{% endif %} style="margin-right: 10px;">
+                        SMS Notifications
+                    </label>
+                </div>
+                <button type="submit" style="width: 100%; padding: 15px; margin-top: 20px; background-color: #002B5B; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">Save Settings</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="section" onclick="toggleSection('password-reset-section')" style="cursor: pointer; margin-bottom: 20px;">
+        <h2 style="font-size: 20px; color: #003366;">Password Management</h2>
+        <div id="password-reset-section" style="display: none;">
+            <form method="post" action="{% url 'password_reset' %}" style="margin-top: 20px;">
+                {% csrf_token %}
+                <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                    <i class="fas fa-envelope" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                    <input type="email" name="email" placeholder="Enter your email" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+                </div>
+                <button type="submit" style="width: 100%; padding: 15px; margin-top: 20px; background-color: #002B5B; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">Reset Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleSection(sectionId) {
+    var section = document.getElementById(sectionId);
+    if (section.style.display === 'none' || section.style.display === '') {
+        section.style.display = 'block';
+    } else {
+        section.style.display = 'none';
+    }
+}
+</script>
 {% endblock %}
