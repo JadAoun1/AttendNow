@@ -3,22 +3,23 @@
 {% block title %}Attend{% endblock %}
 
 {% block content %}
-<div class="form-container">
-    <div class="logo">
-    </div>
-    <h1>Attend</h1>
-    <form id="attend-form" method="post" enctype="multipart/form-data" onsubmit="handleAttend(event)">
+<div class="form-container" style="max-width: 400px; margin: auto; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; background-color: #fff; display: flex; flex-direction: column; align-items: center;">
+    <h1 style="color: #003366; text-align: center;">Attend</h1>
+    <form id="attend-form" method="post" enctype="multipart/form-data" onsubmit="handleAttend(event)" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="photo">Photo:</label>
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label for="photo" style="font-size: 16px; color: #666;">Photo:</label>
             <input type="file" id="photo" name="photo" accept="image/*" style="display:none;">
-            <video id="video" width="320" height="240" autoplay></video>
-            <button type="button" id="capture" class="btn btn-primary btn-lg rounded-pill">Capture Photo</button>
-            <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+            <video id="video" width="320" height="240" autoplay style="border: 3px solid #003366; border-radius: 10px; margin-bottom: 10px;"></video>
+            <canvas id="canvas" width="320" height="240" style="display:none; border: 3px solid #003366; border-radius: 10px;"></canvas>
+            <div style="display: flex; justify-content: center; width: 100%;">
+                <button type="button" id="capture" class="btn btn-primary btn-lg rounded-pill" style="background-color: #002B5B; color: white; border: none; padding: 10px 20px; flex-grow: 1; margin-right: 5px; display: block;">Capture Photo</button>
+                <button type="button" id="recapture" class="btn btn-primary btn-lg rounded-pill" style="background-color: #002B5B; color: white; border: none; padding: 10px 20px; flex-grow: 1; margin-left: 5px; display: none;">Take Another Photo</button>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg rounded-pill">Submit</button>
+        <button type="submit" class="btn btn-primary btn-lg rounded-pill" style="background-color: #002B5B; border: none; color: white; padding: 10px 20px;">Submit</button>
     </form>
-    <div id="error-message" class="error-message"></div>
+    <div id="error-message" class="error-message" style="color: #CC0000; margin-top: 10px;"></div>
 </div>
 
 <script>
@@ -46,7 +47,6 @@ async function handleAttend(event) {
     if (response.ok) {
         alert(data.message);
         window.location.href = '/weekly_attendance';
-        // Perform further actions if needed
     } else {
         document.getElementById('error-message').innerText = data.detail || 'Attendance submission failed. Please try again.';
     }
@@ -54,7 +54,7 @@ async function handleAttend(event) {
 
 function dataURItoBlob(dataURI) {
     var byteString = atob(dataURI.split(',')[1]);
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
     var ab = new ArrayBuffer(byteString.length);
     var ia = new Uint8Array(ab);
     for (var i = 0; i < byteString.length; i++) {
@@ -67,25 +67,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const captureButton = document.getElementById('capture');
+    const recaptureButton = document.getElementById('recapture');
     let stream;
-
-    // Get access to the camera
-    navigator.mediaDevices.getUserMedia({ video: true })
-    .then(function(mediaStream) {
-        stream = mediaStream;
-        video.srcObject = stream;
-    })
-    .catch(function(err) {
-        console.log("An error occurred: " + err);
-    });
 
     captureButton.addEventListener('click', function() {
         const context = canvas.getContext('2d');
         context.drawImage(video, 0, 0, 320, 240);
-        video.pause();
-        stream.getTracks().forEach(track => track.stop());
         canvas.style.display = 'block';
         video.style.display = 'none';
+        captureButton.style.display = 'none';
+        recaptureButton.style.display = 'block';
+        stream.getTracks().forEach(track => track.stop());
+    });
+
+    recaptureButton.addEventListener('click', function() {
+        video.style.display = 'block';
+        canvas.style.display = 'none';
+        captureButton.style.display = 'block';
+        recaptureButton.style.display = 'none';
+        navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(mediaStream) {
+            stream = mediaStream;
+            video.srcObject = stream;
+            video.play();
+        })
+        .catch(function(err) {
+            console.log("An error occurred: " + err);
+        });
     });
 });
 </script>
