@@ -2,6 +2,8 @@ from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
 from .jwt_views import urlpatterns as jwt_urls
+from .views import attendance_records
+
 
 urlpatterns = [
     path('', views.home_view, name='home'),
@@ -35,5 +37,13 @@ urlpatterns = [
     path('messages/', views.messages, name='messages'),
     path('calendar/', views.calendar, name='calendar'),
     path('activity/', views.activity, name='activity'),
+    path('settings/account/', views.account_settings, name='account_settings'),
+    path('settings/notifications/', views.notifications, name='notifications'),
+    path('settings/password_reset/', views.password_reset, name='forgot_password'),
+    path('settings/app/', views.app_settings, name='app_settings'),
+    path('settings/privacy/', views.privacy_settings, name='privacy_settings'),
+    path('settings/support/', views.contact_support, name='contact_support'),
+    path('attendance-records/', attendance_records, name='attendance_records'),
+
 
 ]
