@@ -44,6 +44,9 @@ urlpatterns = [
     path('settings/privacy/', views.privacy_settings, name='privacy_settings'),
     path('settings/support/', views.contact_support, name='contact_support'),
     path('attendance-records/', attendance_records, name='attendance_records'),
+    path('forgot_password/', views.forgot_password, name='forgot_password'),
+    path('reset_password_code/', views.reset_password_code, name='reset_password_code'),
+    path('set_new_password/', views.set_new_password, name='set_new_password'),
 
 
 ]
