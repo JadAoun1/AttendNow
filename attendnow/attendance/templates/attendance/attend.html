@@ -13,8 +13,7 @@
             <video id="video" width="320" height="240" autoplay style="border: 3px solid #003366; border-radius: 10px; margin-bottom: 10px;"></video>
             <canvas id="canvas" width="320" height="240" style="display:none; border: 3px solid #003366; border-radius: 10px;"></canvas>
             <div style="display: flex; justify-content: center; width: 100%;">
-                <button type="button" id="capture" class="btn btn-primary btn-lg rounded-pill" style="background-color: #002B5B; color: white; border: none; padding: 10px 20px; flex-grow: 1; margin-right: 5px; display: block;">Capture Photo</button>
-                <button type="button" id="recapture" class="btn btn-primary btn-lg rounded-pill" style="background-color: #002B5B; color: white; border: none; padding: 10px 20px; flex-grow: 1; margin-left: 5px; display: none;">Take Another Photo</button>
+                <button type="button" id="capture" class="btn btn-primary btn-lg rounded-pill" style="background-color: #002B5B; color: white; border: none; padding: 10px 20px; flex-grow: 1; margin-right: 5px; display: block;">Capture Photo Zabre</button>
             </div>
         </div>
         <button type="submit" class="btn btn-primary btn-lg rounded-pill" style="background-color: #002B5B; border: none; color: white; padding: 10px 20px;">Submit</button>
@@ -67,24 +66,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const captureButton = document.getElementById('capture');
-    const recaptureButton = document.getElementById('recapture');
     let stream;
 
-    captureButton.addEventListener('click', function() {
-        const context = canvas.getContext('2d');
-        context.drawImage(video, 0, 0, 320, 240);
-        canvas.style.display = 'block';
-        video.style.display = 'none';
-        captureButton.style.display = 'none';
-        recaptureButton.style.display = 'block';
-        stream.getTracks().forEach(track => track.stop());
-    });
-
-    recaptureButton.addEventListener('click', function() {
-        video.style.display = 'block';
-        canvas.style.display = 'none';
-        captureButton.style.display = 'block';
-        recaptureButton.style.display = 'none';
+    // Function to start the video stream
+    function startVideoStream() {
         navigator.mediaDevices.getUserMedia({ video: true })
         .then(function(mediaStream) {
             stream = mediaStream;
@@ -94,6 +79,26 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(function(err) {
             console.log("An error occurred: " + err);
         });
+    }
+
+    // Initial video stream start
+    startVideoStream();
+
+    captureButton.addEventListener('click', function() {
+        if (captureButton.innerText === 'Capture Photo Zabre') {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, 320, 240);
+            video.pause();
+            stream.getTracks().forEach(track => track.stop());
+            canvas.style.display = 'block';
+            video.style.display = 'none';
+            captureButton.innerText = 'Take Another Photo';
+        } else {
+            canvas.style.display = 'none';
+            video.style.display = 'block';
+            captureButton.innerText = 'Capture Photo Zabre';
+            startVideoStream();
+        }
     });
 });
 </script>

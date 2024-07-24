@@ -32,22 +32,10 @@
                 <i class="fas fa-lock" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
                 <input type="password" placeholder="Confirm Password" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
             </div>
-            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
-                <i class="fas fa-user-tag" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
-                <select name="role" id="role-select" required onchange="checkRole()" style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
-                    <option value="" disabled selected>Select your role</option>
-                    <option value="student">Student</option>
-                    <option value="employee">Employee</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </div>
-            <div id="org-code-container" style="display: none; margin-bottom: 10px;">
-                <div style="position: relative; width: calc(100% - 20px);">
-                    <i class="fas fa-building" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
-                    <input type="text" id="org-code" name="org_code" placeholder="Enter Organization Code" style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
-                </div>
-            </div>
-            <div id="id-container" style="display: none; margin-bottom: 10px;">
+            <div id="error-message-password" class="error-message" style="color: #CC0000; margin-top: 10px; margin-bottom: 10px;"></div>
+
+
+            <div id="id-container" style="margin-bottom: 10px; ">
                 <div style="position: relative; width: calc(100% - 20px);">
                     <i class="fas fa-id-badge" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
                     <input type="text" id="id-number" name="id_number" placeholder="Enter ID Number" style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
@@ -57,7 +45,13 @@
                 <input type="checkbox" required style="margin-right: 10px;">
                 I agree to the Terms & Conditions and Privacy Policy set out by this site.
             </div>
+            <div class="form-group">
+                <label for="photo">Photo:</label>
+                <input type="file" id="photo" name="photo" accept="image/*" placeholder="Choose Photo" required>
+            </div>
             <button type="submit" style="width: calc(100% - 20px); padding: 15px; margin-top: 20px; background-color: #001A2F; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer;">Register</button>
+            <div id="error-message-api" class="error-message" style="color: #CC0000; margin-top: 10px; margin-bottom: 10px;"></div>
+
             <div style="background-color: transparent; color: #757575; border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-top: 20px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer;">
                 <i class="fab fa-google" style="font-size: 20px; margin-right: 10px;"></i>
                 Continue with Google
@@ -65,28 +59,14 @@
             <div style="font-size: 14px; color: #007ACC; text-align: center; margin-top: 20px;">
                 Already have an account? <a href="{% url 'sign_in' %}" style="color: #007ACC; text-decoration: none; font-weight: 600;">Login</a>
             </div>
+
         </form>
     </div>
 </div>
 
 <script>
-function checkRole() {
-    const roleSelect = document.getElementById('role-select');
-    const orgCodeContainer = document.getElementById('org-code-container');
-    const idContainer = document.getElementById('id-container');
-    if (roleSelect.value === 'admin') {
-        orgCodeContainer.style.display = 'block';
-        idContainer.style.display = 'none';
-    } else if (roleSelect.value === 'student' || roleSelect.value === 'employee') {
-        orgCodeContainer.style.display = 'none';
-        idContainer.style.display = 'block';
-    } else {
-        orgCodeContainer.style.display = 'none';
-        idContainer.style.display = 'none';
-    }
-}
-
 async function handleRegister(event) {
+    document.getElementById('error-message-api').innerText = '';
     event.preventDefault();  // Prevent form from submitting the default way
 
     const firstName = document.querySelector('[placeholder="First Name"]').value;
@@ -94,35 +74,46 @@ async function handleRegister(event) {
     const email = document.querySelector('[placeholder="Email Address"]').value;
     const password = document.querySelector('[placeholder="Password"]').value;
     const confirmPassword = document.querySelector('[placeholder="Confirm Password"]').value;
-    const role = document.getElementById('role-select').value;
-    const orgCode = (role === 'admin') ? document.getElementById('org-code').value : '';
-    const idNumber = (role === 'student' || role === 'employee') ? document.getElementById('id-number').value : '';
+    const idNumber = document.getElementById('id-number').value;
+    const photo = document.getElementById('photo').files[0];
+    const fullName = `${firstName} ${lastName}`;
+
+    if (password !== confirmPassword) {
+        document.getElementById('error-message-password').innerText = 'Passwords do not match. Please try again.';
+        return;
+    }
+    else {
+        document.getElementById('error-message-password').innerText = '';
+    }
 
     const formData = new FormData();
-    formData.append('first_name', firstName);
-    formData.append('last_name', lastName);
+    formData.append('full_name', fullName);
     formData.append('email', email);
     formData.append('password', password);
-    formData.append('confirm_password', confirmPassword);
-    formData.append('role', role);
-    if (orgCode) formData.append('org_code', orgCode);
-    if (idNumber) formData.append('id_number', idNumber);
+    formData.append('university_id', idNumber);
+    formData.append('photo', photo);
 
-    const response = await fetch('/api/register/', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-        },
-        body: formData
-    });
+    try {
+        const response = await fetch('/api/register/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    if (response.ok) {
-        alert(data.message);
-        window.location.href = '/sign_in';
-    } else {
-        document.getElementById('error-message').innerText = data.detail || 'Registration failed. Please check your details.';
+        if (response.ok) {
+            alert(data.message);
+            window.location.href = '/sign_in';
+        } else if (response.status === 400) {
+            document.getElementById('error-message-api').innerText = data.error_message || 'Registration failed. Please check your details.';
+        } else {
+            document.getElementById('error-message-api').innerText = data.detail || 'Registration failed. Please check your details.';
+        }
+    } catch (error) {
+        document.getElementById('error-message-api').innerText = 'An unexpected error occurred. Please try again.';
     }
 }
 </script>
