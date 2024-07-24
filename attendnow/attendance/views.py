@@ -35,7 +35,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
-
+from django.db.utils import IntegrityError
 def home(request):
     return render(request, 'attendance/home.html')
 
@@ -48,17 +48,17 @@ def sign_in_view(request):
     return render(request, 'attendance/SignIn.html', {'form': form})
 
 def sign_up_view(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Account created successfully.')
-            return redirect('profile')
-        else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        form = SignUpForm()
+    # if request.method == 'POST':
+    #     form = SignUpForm(request.POST)
+    #     if form.is_valid():
+    #         user = form.save()
+    #         login(request, user)
+    #         messages.success(request, 'Account created successfully.')
+    #         return redirect('profile')
+    #     else:
+    #         messages.error(request, 'Please correct the errors below.')
+    # else:
+    form = SignUpForm()
     return render(request, 'attendance/signUp.html', {'form': form})
 
 def submit_attendance(request):
@@ -129,16 +129,18 @@ class RegisterView(APIView):
 
         image = face_recognition.load_image_file(tmp_file)
         face_encoding = face_recognition.face_encodings(image)[0]
+        try:
 
-        user = User(
-            full_name=data['full_name'],
-            university_id=data['university_id'],
-            password=data['password'],
-            image_url=image_url,
-        )
-        user.set_face_encoding(face_encoding)
-        user.save()
-
+            user = User(
+                full_name=data['full_name'],
+                university_id=data['university_id'],
+                password=data['password'],
+                image_url=image_url,
+            )
+            user.set_face_encoding(face_encoding)
+            user.save()
+        except IntegrityError as e:
+            return Response({"error_message": "User ID Already Exists!"}, status=status.HTTP_400_BAD_REQUEST)
         os.remove(tmp_file)
 
         return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)

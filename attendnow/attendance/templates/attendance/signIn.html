@@ -1,3 +1,4 @@
+
 {% extends 'attendance/base.html' %}
 
 {% load static %}
@@ -53,7 +54,7 @@ async function handleLogin(event) {
         localStorage.setItem('access', data.access);
         localStorage.setItem('refresh', data.refresh);
         // Redirect or perform further actions
-        window.location.href = '/attendance';
+        window.location.href = '/dashboard';
     } else {
         document.getElementById('error-message').innerText = data.detail || 'Login failed. Please check your credentials.';
     }
