@@ -1,0 +1,39 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Support{% endblock %}
+
+{% block content %}
+<div style="background-color: white; text-align: center; padding: 50px 0;">
+    <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 0 auto; padding: 20px; width: 70%; display: flex; flex-direction: column; align-items: center;">
+        <h2 style="font-size: 28px; font-weight: bold; color: #001A2F; margin-bottom: 20px;">Contact Us</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px;">
+            <!-- Email Contact -->
+            <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;">
+                <i class="fas fa-envelope" style="font-size: 60px; color: #001A2F; margin-bottom: 10px;"></i>
+                <div style="font-size: 18px; color: #001A2F;">Email</div>
+                <div style="font-size: 16px; color: #666;">support@example.com</div>
+            </div>
+            <!-- Phone Contact -->
+            <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;">
+                <i class="fas fa-phone" style="font-size: 60px; color: #001A2F; margin-bottom: 10px;"></i>
+                <div style="font-size: 18px; color: #001A2F;">Phone</div>
+                <div style="font-size: 16px; color: #666;">+1 (555) 123-4567</div>
+            </div>
+            <!-- Support Chat -->
+            <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;">
+                <i class="fas fa-comments" style="font-size: 60px; color: #001A2F; margin-bottom: 10px;"></i>
+                <div style="font-size: 18px; color: #001A2F;">Live Chat</div>
+                <div style="font-size: 16px; color: #666;">Available on our website</div>
+            </div>
+            <!-- Social Media -->
+            <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;">
+                <i class="fas fa-share-alt" style="font-size: 60px; color: #001A2F; margin-bottom: 10px;"></i>
+                <div style="font-size: 18px; color: #001A2F;">Social Media</div>
+                <div style="font-size: 16px; color: #666;">
+                    Follow us on <a href="#" style="color: #001A2F; text-decoration: none;">Facebook</a>, <a href="#" style="color: #001A2F; text-decoration: none;">Twitter</a>, <a href="#" style="color: #001A2F; text-decoration: none;">Instagram</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends 'attendance/base.html' %}
+
+{% load static %}
+
+{% block title %}Messages{% endblock %}
+
+{% block content %}
+
+<div style="background-color: white; padding: 50px 0; display: flex; justify-content: center; align-items: flex-start;">
+    <!-- Chat Container -->
+    <div style="width: 70%; max-width: 1200px; margin-right: 20px; display: flex; flex-direction: column; height: 600px; border: 1px solid #ccc; border-radius: 10px;">
+        <div id="chat-window" style="flex-grow: 1; overflow-y: auto; padding: 20px; background-color: #f9f9f9; border-bottom: 1px solid #ccc;">
+            <!-- Messages will be dynamically inserted here -->
+        </div>
+        <div style="display: flex; padding: 10px; background-color: #fff; border-top: 1px solid #ccc;">
+            <input type="text" id="message-input" placeholder="Type your message..." style="flex-grow: 1; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+            <button id="send-button" style="padding: 10px 20px; margin-left: 10px; border-radius: 5px; background-color: #001A2F; color: #fff; border: none; cursor: pointer;">
+                <i class="fas fa-paper-plane"></i> Send
+            </button>
+        </div>
+    </div>
+
+    <!-- Contacts List -->
+    <div id="contacts-list" style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; width: 30%; max-width: 400px; font-size: 16px; color: #666; max-height: 600px; overflow-y: auto;">
+        <h2 style="font-size: 24px; color: #001A2F; margin-bottom: 20px;">Friends</h2>
+        <div id="friends-section">
+            <!-- Friends list items will be dynamically updated here -->
+        </div>
+        <h2 style="font-size: 24px; color: #001A2F; margin-top: 20px;">Groups</h2>
+        <div id="groups-section">
+            <!-- Groups list items will be dynamically updated here -->
+        </div>
+    </div>
+</div>
+
+<!-- Include FontAwesome library for icons -->
+<link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css' rel='stylesheet' />
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var chatWindow = document.getElementById('chat-window');
+    var messageInput = document.getElementById('message-input');
+    var sendButton = document.getElementById('send-button');
+
+    // Simulated friends and groups list
+    var friends = [];
+    var groups = [];
+
+    // Populate friends and groups list
+    var friendsSection = document.getElementById('friends-section');
+    var groupsSection = document.getElementById('groups-section');
+
+    if (friends.length === 0) {
+        var noFriendsMessage = document.createElement('p');
+        noFriendsMessage.textContent = 'No friends found. Add friends to start chatting!';
+        noFriendsMessage.style.color = '#999';
+        friendsSection.appendChild(noFriendsMessage);
+
+        var addFriendButton = document.createElement('button');
+        addFriendButton.textContent = 'Add Friend';
+        addFriendButton.style.padding = '10px 20px';
+        addFriendButton.style.marginTop = '10px';
+        addFriendButton.style.borderRadius = '5px';
+        addFriendButton.style.backgroundColor = '#001A2F';
+        addFriendButton.style.color = '#fff';
+        addFriendButton.style.border = 'none';
+        addFriendButton.style.cursor = 'pointer';
+        friendsSection.appendChild(addFriendButton);
+    } else {
+        friends.forEach(friend => {
+            var friendItem = document.createElement('div');
+            friendItem.style.padding = '10px';
+            friendItem.style.borderBottom = '1px solid #ccc';
+            friendItem.style.cursor = 'pointer';
+            friendItem.textContent = friend;
+            friendsSection.appendChild(friendItem);
+        });
+    }
+
+    if (groups.length === 0) {
+        var noGroupsMessage = document.createElement('p');
+        noGroupsMessage.textContent = 'No groups found. Create groups to start chatting!';
+        noGroupsMessage.style.color = '#999';
+        groupsSection.appendChild(noGroupsMessage);
+
+        var createGroupButton = document.createElement('button');
+        createGroupButton.textContent = 'Create Group';
+        createGroupButton.style.padding = '10px 20px';
+        createGroupButton.style.marginTop = '10px';
+        createGroupButton.style.borderRadius = '5px';
+        createGroupButton.style.backgroundColor = '#001A2F';
+        createGroupButton.style.color = '#fff';
+        createGroupButton.style.border = 'none';
+        createGroupButton.style.cursor = 'pointer';
+        groupsSection.appendChild(createGroupButton);
+    } else {
+        groups.forEach(group => {
+            var groupItem = document.createElement('div');
+            groupItem.style.padding = '10px';
+            groupItem.style.borderBottom = '1px solid #ccc';
+            groupItem.style.cursor = 'pointer';
+            groupItem.textContent = group;
+            groupsSection.appendChild(groupItem);
+        });
+    }
+
+    // Send message
+    sendButton.addEventListener('click', function() {
+        var messageText = messageInput.value;
+        if (messageText) {
+            addMessage('You', messageText);
+            messageInput.value = '';
+            // Simulate response after a delay
+            setTimeout(() => {
+                addMessage('Alice', 'This is a simulated response.');
+            }, 1000);
+        }
+    });
+
+    // Add message to chat window
+    function addMessage(sender, message) {
+        var messageItem = document.createElement('div');
+        messageItem.style.marginBottom = '15px';
+        messageItem.innerHTML = `
+            <strong>${sender}</strong>: ${message}
+        `;
+        chatWindow.appendChild(messageItem);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+});
+</script>
+
+{% endblock %}
