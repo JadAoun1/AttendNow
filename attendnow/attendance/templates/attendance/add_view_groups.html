@@ -1,0 +1,93 @@
+{% extends 'attendance/base.html' %}
+
+{% load static %}
+
+{% block title %}View Groups{% endblock %}
+
+{% block content %}
+
+<div style="background-color: white; padding: 50px 0; display: flex; justify-content: center; align-items: flex-start;">
+    <!-- Groups Table Container -->
+    <div style="width: 70%; max-width: 1200px; margin-right: 20px;">
+        <h2 style="font-size: 24px; color: #001A2F; margin-bottom: 20px;">Your Groups</h2>
+        <table style="width: 100%; border-collapse: collapse; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
+            <thead>
+                <tr style="background-color: #001A2F; color: #fff;">
+                    <th style="padding: 15px; text-align: left;">Group Name</th>
+                    <th style="padding: 15px; text-align: left;">Members</th>
+                    <th style="padding: 15px; text-align: left;">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="groups-table-body">
+                <!-- Group rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Include FontAwesome library for icons -->
+<link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css' rel='stylesheet' />
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Simulated groups data
+    var groups = [
+        {
+            name: 'Project Team',
+            members: ['Alice', 'Bob', 'Charlie'],
+        },
+        {
+            name: 'Study Group',
+            members: ['David', 'Eve', 'Frank'],
+        }
+    ];
+
+    // Populate groups table
+    var groupsTableBody = document.getElementById('groups-table-body');
+    
+    if (groups.length === 0) {
+        var noGroupsMessage = document.createElement('tr');
+        noGroupsMessage.innerHTML = '<td colspan="3" style="padding: 15px; text-align: center; color: #999;">You are not in any groups. <button id="create-group-button" style="padding: 10px 20px; margin-top: 10px; border-radius: 5px; background-color: #001A2F; color: #fff; border: none; cursor: pointer;">Create Group</button></td>';
+        groupsTableBody.appendChild(noGroupsMessage);
+
+        var createGroupButton = document.getElementById('create-group-button');
+        createGroupButton.addEventListener('click', function() {
+            alert('Redirect to create group page.');
+            // Implement redirection to create group page
+        });
+    } else {
+        groups.forEach(group => {
+            var groupRow = document.createElement('tr');
+            groupRow.style.borderBottom = '1px solid #ccc';
+            groupRow.innerHTML = `
+                <td style="padding: 15px;">${group.name}</td>
+                <td style="padding: 15px;">${group.members.join(', ')}</td>
+                <td style="padding: 15px;">
+                    <i class="fas fa-eye view-group-icon" title="View Group" style="color: #001A2F; cursor: pointer; margin-right: 10px;"></i>
+                    <i class="fas fa-trash leave-group-icon" title="Delete Group" style="color: #001A2F; cursor: pointer;"></i>
+                </td>
+            `;
+            groupsTableBody.appendChild(groupRow);
+        });
+
+        var viewGroupIcons = document.getElementsByClassName('view-group-icon');
+        var leaveGroupIcons = document.getElementsByClassName('leave-group-icon');
+
+        Array.from(viewGroupIcons).forEach(icon => {
+            icon.addEventListener('click', function() {
+                alert('Redirect to view group page.');
+                // Implement redirection to view group page
+            });
+        });
+
+        Array.from(leaveGroupIcons).forEach(icon => {
+            icon.addEventListener('click', function() {
+                alert('Leave group action.');
+                // Implement leave group action
+            });
+        });
+    }
+});
+</script>
+
+{% endblock %}

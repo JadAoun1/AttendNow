@@ -1,0 +1,63 @@
+{% extends 'attendance/base.html' %}
+
+{% load static %}
+
+{% block title %}Activity{% endblock %}
+
+{% block content %}
+
+<div style="background-color: white; padding: 50px 0;">
+    <div style="width: 80%; max-width: 1200px; margin: 0 auto;">
+        <h1 style="font-size: 28px; color: #001A2F; margin-bottom: 20px; text-align: center;">User Activity</h1>
+
+        <!-- Announcements Section -->
+        <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; margin-bottom: 30px;">
+            <h2 style="font-size: 24px; color: #001A2F; margin-bottom: 15px;">Announcements</h2>
+            <ul style="list-style-type: none; padding: 0; margin: 0;">
+                {% for announcement in announcements %}
+                <li style="padding: 15px; border-bottom: 1px solid #ddd; color: #666;">
+                    <strong>{{ announcement.title }}</strong><br>
+                    <span>{{ announcement.date }}</span><br>
+                    <p>{{ announcement.content }}</p>
+                </li>
+                {% empty %}
+                <li style="padding: 15px; color: #666;">No announcements available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Tasks Section -->
+        <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; margin-bottom: 30px;">
+            <h2 style="font-size: 24px; color: #001A2F; margin-bottom: 15px;">Tasks to Complete</h2>
+            <ul style="list-style-type: none; padding: 0; margin: 0;">
+                {% for task in tasks %}
+                <li style="padding: 15px; border-bottom: 1px solid #ddd; color: #666;">
+                    <strong>{{ task.title }}</strong><br>
+                    <span>{{ task.due_date }}</span><br>
+                    <p>{{ task.description }}</p>
+                </li>
+                {% empty %}
+                <li style="padding: 15px; color: #666;">No tasks available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Check-Ins Section -->
+        <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px;">
+            <h2 style="font-size: 24px; color: #001A2F; margin-bottom: 15px;">Check-Ins</h2>
+            <ul style="list-style-type: none; padding: 0; margin: 0;">
+                {% for checkin in checkins %}
+                <li style="padding: 15px; border-bottom: 1px solid #ddd; color: #666;">
+                    <strong>{{ checkin.location }}</strong><br>
+                    <span>{{ checkin.date }}</span><br>
+                    <p>Checked in by: {{ checkin.user }}</p>
+                </li>
+                {% empty %}
+                <li style="padding: 15px; color: #666;">No check-ins available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
