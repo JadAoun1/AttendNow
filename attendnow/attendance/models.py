@@ -1,7 +1,6 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
 from django.db import models
 import pickle
-
 
 class UserManager(BaseUserManager):
     def create_user(self, university_id, password=None, **extra_fields):
@@ -42,8 +41,6 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.university_id
 
-
-
 class Attendance(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -53,7 +50,13 @@ class Attendance(models.Model):
     
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_image = models.ImageField(upload_to='profile_images/', default='default.jpg')
+    profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
+    reset_code = models.IntegerField(null=True, blank=True)
+    email = models.EmailField(unique=True, default='default@example.com')  # Add a default value
 
     def __str__(self):
-        return self.user.username
+        return self.user.university_id
+
+class LogEntry(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='attendance_log_entries')
+    # Other fields...

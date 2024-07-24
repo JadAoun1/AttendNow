@@ -1,0 +1,283 @@
+{% extends 'attendance/base.html' %}
+
+{% load static %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block content %}
+
+<div style="background-color: white; padding: 50px 0; display: flex; justify-content: center; align-items: flex-start;">
+    <!-- Calendar Container -->
+    <div style="width: 70%; max-width: 1200px; margin-right: 20px;">
+        <div id="calendar" style="width: 100%;"></div>
+    </div>
+
+    <!-- Event List -->
+    <div id="event-list" style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; width: 30%; max-width: 400px; font-size: 16px; color: #666; max-height: 600px; overflow-y: auto;">
+        <h2 style="font-size: 24px; color: #001A2F; margin-bottom: 20px;">Events List</h2>
+        <!-- Event list items will be dynamically updated here -->
+    </div>
+</div>
+
+<!-- Include FullCalendar library -->
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        editable: true,
+        selectable: true,
+        events: [], // You can load events from your server here
+        dateClick: async function(info) {
+            var dateStr = info.dateStr;
+            var { title, time } = await promptStyled('Enter event details:', dateStr);
+            if (title && time) {
+                var eventDateTime = new Date(dateStr + 'T' + time);
+                calendar.addEvent({
+                    title: title,
+                    start: eventDateTime,
+                    allDay: false
+                });
+                addEventToList(eventDateTime, title);
+            }
+        },
+        eventClick: function(info) {
+            if (confirm('Do you want to delete this event?')) {
+                info.event.remove();
+                removeEventFromList(info.event.startStr);
+            }
+        },
+        themeSystem: 'bootstrap', // Use a theme system for better styling control
+        eventBackgroundColor: '#001A2F', // Color for event background
+        eventBorderColor: '#001A2F', // Color for event border
+        dayCellDidMount: function(info) {
+            if (info.date.getDay() === 0 || info.date.getDay() === 6) {
+                // Highlight weekends with a different background color
+                info.el.style.backgroundColor = '#e0e0e0'; // Light gray for weekends
+            }
+        },
+        eventDidMount: function(info) {
+            // Ensure events fit within calendar boxes
+            info.el.style.whiteSpace = 'nowrap';
+            info.el.style.overflow = 'hidden';
+            info.el.style.textOverflow = 'ellipsis';
+        },
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        buttonText: {
+            today: 'Today',
+            month: 'Month',
+            week: 'Week',
+            day: 'Day'
+        },
+        customButtons: {
+            prev: {
+                text: 'Prev',
+                click: function() {
+                    calendar.prev();
+                },
+                bootstrapFontAwesome: 'fas fa-chevron-left' // Using FontAwesome icons
+            },
+            next: {
+                text: 'Next',
+                click: function() {
+                    calendar.next();
+                },
+                bootstrapFontAwesome: 'fas fa-chevron-right' // Using FontAwesome icons
+            },
+            today: {
+                text: 'Today',
+                click: function() {
+                    calendar.today();
+                },
+                bootstrapFontAwesome: 'fas fa-calendar-day' // Using FontAwesome icons
+            }
+        },
+        buttonIcons: {
+            prev: 'chevron-left',
+            next: 'chevron-right',
+            prevYear: 'chevron-double-left',
+            nextYear: 'chevron-double-right'
+        },
+        customButtons: {
+            prev: {
+                text: 'Prev',
+                click: function() {
+                    calendar.prev();
+                }
+            },
+            next: {
+                text: 'Next',
+                click: function() {
+                    calendar.next();
+                }
+            },
+            today: {
+                text: 'Today',
+                click: function() {
+                    calendar.today();
+                }
+            }
+        },
+        buttonText: {
+            today: 'Today',
+            month: 'Month',
+            week: 'Week',
+            day: 'Day'
+        },
+        customButtons: {
+            prev: {
+                text: 'Prev',
+                click: function() {
+                    calendar.prev();
+                }
+            },
+            next: {
+                text: 'Next',
+                click: function() {
+                    calendar.next();
+                }
+            },
+            today: {
+                text: 'Today',
+                click: function() {
+                    calendar.today();
+                }
+            }
+        }
+    });
+    calendar.render();
+
+    // Add event to list
+    function addEventToList(date, title) {
+        var eventList = document.getElementById('event-list');
+        var eventItem = document.createElement('div');
+        eventItem.style.backgroundColor = eventList.childElementCount % 2 === 0 ? '#001A2F' : '#ffffff';
+        eventItem.style.color = eventList.childElementCount % 2 === 0 ? '#ffffff' : '#666';
+        eventItem.style.borderRadius = '10px';
+        eventItem.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+        eventItem.style.padding = '10px';
+        eventItem.style.marginBottom = '10px';
+        eventItem.style.display = 'flex';
+        eventItem.style.justifyContent = 'space-between';
+        eventItem.style.alignItems = 'center';
+        eventItem.style.fontSize = '16px';
+        eventItem.textContent = `${date.toLocaleString()}: ${title}`;
+
+        var removeButton = document.createElement('button');
+        removeButton.innerHTML = '<i class="fas fa-trash"></i>';
+        removeButton.style.padding = '5px 10px';
+        removeButton.style.borderRadius = '5px';
+        removeButton.style.backgroundColor = 'transparent';
+        removeButton.style.border = 'none';
+        removeButton.style.cursor = 'pointer';
+        removeButton.style.color = eventList.childElementCount % 2 === 0 ? 'white' : '#001A2F';
+        removeButton.addEventListener('click', function() {
+            removeEventFromList(date);
+            calendar.getEvents().forEach(function(event) {
+                if (event.startStr === date.toISOString()) {
+                    event.remove();
+                }
+            });
+        });
+
+        eventItem.appendChild(removeButton);
+        eventList.appendChild(eventItem);
+    }
+
+    // Remove event from list
+    function removeEventFromList(date) {
+        var eventList = document.getElementById('event-list');
+        var items = eventList.childNodes;
+        items.forEach(item => {
+            if (item.textContent.startsWith(date.toLocaleString())) {
+                eventList.removeChild(item);
+            }
+        });
+    }
+
+    // Styled prompt function
+    function promptStyled(message, dateStr) {
+        return new Promise((resolve) => {
+            var promptOverlay = document.createElement('div');
+            promptOverlay.style.position = 'fixed';
+            promptOverlay.style.top = '0';
+            promptOverlay.style.left = '0';
+            promptOverlay.style.width = '100%';
+            promptOverlay.style.height = '100%';
+            promptOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            promptOverlay.style.display = 'flex';
+            promptOverlay.style.justifyContent = 'center';
+            promptOverlay.style.alignItems = 'center';
+            promptOverlay.style.zIndex = '1000';
+
+            var promptBox = document.createElement('div');
+            promptBox.style.backgroundColor = '#FFFFFF';
+            promptBox.style.borderRadius = '10px';
+            promptBox.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+            promptBox.style.padding = '20px';
+            promptBox.style.width = '300px';
+            promptBox.style.textAlign = 'center';
+
+            var promptMessage = document.createElement('p');
+            promptMessage.textContent = message;
+            promptMessage.style.fontSize = '16px';
+            promptMessage.style.color = '#333';
+            promptBox.appendChild(promptMessage);
+
+            var dateLabel = document.createElement('p');
+            dateLabel.textContent = `Date: ${dateStr}`;
+            dateLabel.style.fontSize = '14px';
+            dateLabel.style.color = '#666';
+            promptBox.appendChild(dateLabel);
+
+            var promptInputTitle = document.createElement('input');
+            promptInputTitle.type = 'text';
+            promptInputTitle.placeholder = 'Event Title';
+            promptInputTitle.style.width = '100%';
+            promptInputTitle.style.padding = '10px';
+            promptInputTitle.style.marginTop = '10px';
+            promptInputTitle.style.marginBottom = '10px';
+            promptInputTitle.style.borderRadius = '5px';
+            promptInputTitle.style.border = '1px solid #CCC';
+            promptBox.appendChild(promptInputTitle);
+
+            var promptInputTime = document.createElement('input');
+            promptInputTime.type = 'time';
+            promptInputTime.style.width = '100%';
+            promptInputTime.style.padding = '10px';
+            promptInputTime.style.marginTop = '10px';
+            promptInputTime.style.marginBottom = '20px';
+            promptInputTime.style.borderRadius = '5px';
+            promptInputTime.style.border = '1px solid #CCC';
+            promptBox.appendChild(promptInputTime);
+
+            var promptButton = document.createElement('button');
+            promptButton.textContent = 'Submit';
+            promptButton.style.padding = '10px 20px';
+            promptButton.style.borderRadius = '5px';
+            promptButton.style.backgroundColor = '#001A2F';
+            promptButton.style.color = '#FFFFFF';
+            promptButton.style.border = 'none';
+            promptButton.style.cursor = 'pointer';
+            promptButton.addEventListener('click', function() {
+                resolve({ title: promptInputTitle.value, time: promptInputTime.value });
+                document.body.removeChild(promptOverlay);
+            });
+            promptBox.appendChild(promptButton);
+
+            promptOverlay.appendChild(promptBox);
+            document.body.appendChild(promptOverlay);
+        });
+    }
+});
+</script>
+
+{% endblock %}
