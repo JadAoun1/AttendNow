@@ -572,7 +572,6 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(send_attendance_email, 'interval', minutes=20)
 #Use this to make it send at hour 17
 # scheduler.add_job(send_attendance_email, 'cron', hour=17, minute=0)
-send_attendance_email()
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
