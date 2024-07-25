@@ -20,7 +20,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User,Attendance
-from .serializers import UserSerializer,AttendanceSerializer
+from .serializers import UserSerializer,AttendanceSerializer,AttendanceSerializerWithUserDetails
 from django.conf import settings
 import face_recognition
 import boto3
@@ -36,6 +36,140 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 from django.db.utils import IntegrityError
+class AdminRegisterView(APIView):
+    def post(self, request):
+        data = request.data
+
+        try:
+
+            user = User(
+                full_name=data['full_name'],
+                username=data['username'],
+                password=data['password'],
+                is_superuser=True,
+                smtp_email=data['smtp_email'],
+                smtp_password=data['smtp_password']
+
+            )
+
+            user.save()
+        except IntegrityError as e:
+            return Response({"error_message": "User ID Already Exists!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "Admin registered successfully"}, status=status.HTTP_201_CREATED)
+
+class AdminLoginView(APIView):
+    def post(self, request):
+        username = request.data['username']
+        password = request.data['password']
+
+        user = get_object_or_404(User, username=username, password=password,is_superuser=True)
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            "message": "Login successful",
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }, status=status.HTTP_200_OK)
+
+class ChangeAdminSMDP(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        if not user.is_superuser:
+            return Response({
+                "message": 'You are not Authorized to change SMTP!',
+
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        smtp_email = request.data['smtp_email']
+        smtp_password = request.data['smtp_password']
+        user.smtp_email = smtp_email
+        user.smtp_password = smtp_password
+        user.save()
+        return Response({
+            "message": 'SMTP Email and Password updated successfully.',
+
+        }, status=status.HTTP_200_OK)
+
+class AdminGetUsers(ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_superuser:
+            return Response({
+                "message": 'You are not Authorized to get all Users!',
+
+            }, status=status.HTTP_403_FORBIDDEN)
+        return User.objects.filter(is_superuser=False)
+
+class AdminGetTodaysAttendance(ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = AttendanceSerializerWithUserDetails
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_superuser:
+            return Response({
+                "message": 'You are not Authorized to get attendance!',
+
+            }, status=status.HTTP_403_FORBIDDEN)
+        today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        user_id = self.request.query_params.get('user_id', None)
+        date_str = self.request.query_params.get('date', None)
+        user_id = self.request.query_params.get('user_id', None)
+
+        # Convert date_str to a datetime.date object
+        if date_str:
+            try:
+                date = datetime.strptime(date_str, '%Y-%m-%d').date()
+            except ValueError:
+                return Response({
+                    "message": "Invalid date format. Use YYYY-MM-DD.",
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            start_of_day = datetime.combine(date, datetime.min.time())
+            end_of_day = datetime.combine(date, datetime.max.time())
+
+            if user_id:
+                return Attendance.objects.filter(
+                    timestamp__range=(start_of_day, end_of_day),
+                    user__university_id=user_id
+                )
+            else:
+                return Attendance.objects.filter(
+                    timestamp__range=(start_of_day, end_of_day)
+                )
+        else:
+            today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+
+            if user_id:
+                return Attendance.objects.filter(timestamp__gte=today, user__university_id=user_id)
+            else:
+                return Attendance.objects.filter(timestamp__gte=today)
+
+
+def admin_view(request):
+    if User.objects.filter(is_superuser=True).exists():
+        return render(request, 'attendance/admin_login.html')
+    else:
+        return render(request, 'attendance/admin_register.html')
+
+def admin_dashboard(request):
+    # if not request.user.is_superuser:
+    #     return redirect('home')
+    # Your admin dashboard logic here
+    return render(request, 'attendance/admin_dashboard.html')
+
+def change_email_password(request):
+
+    return render(request, 'attendance/change_email_password.html')
 def home(request):
     return render(request, 'attendance/home.html')
 
@@ -215,9 +349,12 @@ class WeeklyAttendanceView(ListAPIView):
         return Attendance.objects.filter(user=user, timestamp__gte=one_week_ago)
 
 def send_attendance_email():
-    sender_email = "<YOUR EMAIL>"
-    receiver_email = "<RECEIVER EMAIL>"
-    password = "<YOUR PASSWORD>"
+    user = User.objects.filter(is_superuser=True).first()
+    if not user:
+        return
+    sender_email = user.smtp_email
+    receiver_email = user.smtp_email
+    password = user.smtp_password
 
     subject = "Attendance for Today's Class"
     body = "Hello! Here is the attendance of the class for today."
@@ -286,6 +423,13 @@ def calendar(request):
 def activity(request):
     return render(request, 'attendance/activity.html')
 
+def users(request):
+    return render(request, 'attendance/users.html')
+def smtp_settings(request):
+    return render(request, 'attendance/smtp_settings.html')
+
+def admin_user_attendance(request):
+    return render(request, 'attendance/admin_user_attendance.html')
 
 def overall_attendance(request):
     return render(request, 'attendance/overall_attendance.html')
@@ -326,10 +470,10 @@ def contact_support(request):
 
 scheduler = BackgroundScheduler()
 #Use this for testing
-scheduler.add_job(send_attendance_email, 'interval', minutes=2)
+scheduler.add_job(send_attendance_email, 'interval', minutes=20)
 #Use this to make it send at hour 17
 # scheduler.add_job(send_attendance_email, 'cron', hour=17, minute=0)
+send_attendance_email()
 scheduler.start()
-
 atexit.register(lambda: scheduler.shutdown())
 

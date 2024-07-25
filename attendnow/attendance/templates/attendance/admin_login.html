@@ -1,0 +1,57 @@
+
+{% extends 'attendance/base.html' %}
+
+{% load static %}
+
+{% block title %}Sign In to Admin Panel{% endblock %}
+
+{% block content %}
+
+<div style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 120px); background: white;">
+    <div style="background-color: #FFFFFF; border-radius: 20px; padding: 40px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        <h1 style="margin-bottom: 20px; font-size: 24px; color: #003366;">Sign In</h1>
+
+        <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+            <i class="fas fa-user" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+            <input type="text" id="username" placeholder="Email/Username" style="width: 100%; padding: 15px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+        </div>
+        <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+            <i class="fas fa-lock" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+            <input type="password" id="password" placeholder="Password" style="width: 100%; padding: 15px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+        </div>
+        <button onclick="handleLogin(event)" style="width: calc(100% - 20px); padding: 15px; margin-top: 20px; background-color: #001A2F; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">Log In</button>
+
+    </div>
+</div>
+
+<script>
+async function handleLogin(event) {
+    event.preventDefault();  // Prevent form from submitting the default way
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    const response = await fetch('/admin-panel/login/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',  // Include CSRF token
+        },
+        body: JSON.stringify({ username: username, password: password })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        alert(data.message);
+        // Store the tokens
+        localStorage.setItem('access', data.access);
+        localStorage.setItem('refresh', data.refresh);
+        // Redirect or perform further actions
+        window.location.href = '/admin-panel/dashboard/';
+    } else {
+        document.getElementById('error-message').innerText = data.detail || 'Login failed. Please check your credentials.';
+    }
+}
+</script>
+{% endblock %}

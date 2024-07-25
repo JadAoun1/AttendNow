@@ -44,6 +44,20 @@ urlpatterns = [
     path('settings/privacy/', views.privacy_settings, name='privacy_settings'),
     path('settings/support/', views.contact_support, name='contact_support'),
     path('attendance-records/', attendance_records, name='attendance_records'),
+    path('admin-panel/', views.admin_view, name='admin'),
+    path('admin-panel/view-users', views.users, name='users'),
+    path('admin-panel/view_user_attendance', views.admin_user_attendance, name='admin_user_attendance'),
+    path('admin-panel/modify_smtp_settings', views.smtp_settings, name='smtp_settings'),
+
+
+    path('admin-panel/register/', views.AdminRegisterView.as_view(), name='register_admin'),
+    path('admin-panel/login/', views.AdminLoginView.as_view(), name='login_admin'),
+
+    path('admin-panel/dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('admin-panel/change-email-password/', views.change_email_password, name='change_email_password'),
+    path('admin-panel/users/', views.AdminGetUsers.as_view(), name='admin_users'),
+    path('admin-panel/attendance-today/', views.AdminGetTodaysAttendance.as_view(), name='admin_todays_attendance'),
+    path('admin-panel/modify-smtp-settings/', views.ChangeAdminSMDP.as_view(), name='change_smtp_settings'),
 
 
 ]
