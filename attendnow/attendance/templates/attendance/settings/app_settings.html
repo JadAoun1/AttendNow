@@ -1,0 +1,44 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}App Settings{% endblock %}
+
+{% load static %}  <!-- Load static files if necessary -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+{% block content %}
+<div style="background-color: white; padding: 50px 0;">
+    <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: auto; padding: 20px; width: 70%; display: flex; flex-direction: column; align-items: center;">
+        <h2 style="font-size: 28px; font-weight: bold; color: #001A2F; margin-bottom: 20px;">App Settings</h2>
+        <div style="width: 100%; max-width: 600px;">
+            
+            <!-- Theme Settings -->
+            <div class="setting-item" style="margin-bottom: 20px;">
+                <h4 style="color: #001A2F;">Theme</h4>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label for="theme-select" style="color: #666;">Select Theme</label>
+                    <select id="theme-select" name="theme" style="padding: 5px; border-radius: 5px;">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Privacy Settings -->
+            <div class="setting-item" style="margin-bottom: 20px;">
+                <h4 style="color: #001A2F;">Privacy</h4>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label for="privacy-toggle" style="color: #666;">Privacy Mode</label>
+                    <input type="checkbox" id="privacy-toggle" name="privacy" style="transform: scale(1.5);">
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="submit" style="background-color: #001A2F; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-size: 18px;">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

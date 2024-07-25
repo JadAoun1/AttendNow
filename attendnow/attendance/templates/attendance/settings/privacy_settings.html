@@ -1,0 +1,48 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Privacy Settings{% endblock %}
+
+{% block content %}
+<div style="background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 80%; margin: 0 auto;">
+    <h2 style="color: #001A2F;">Privacy Settings</h2>
+    
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <form method="post" action="{% url 'privacy_settings' %}">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 20px;">
+            <label for="profile_visibility" style="font-weight: bold; color: #001A2F;">Profile Visibility:</label><br>
+            <select id="profile_visibility" name="profile_visibility" style="width: 100%; padding: 10px;">
+                <option value="public" {% if profile_visibility == 'public' %}selected{% endif %}>Public</option>
+                <option value="private" {% if profile_visibility == 'private' %}selected{% endif %}>Private</option>
+            </select>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <input type="checkbox" id="email_notifications" name="email_notifications" {% if email_notifications %}checked{% endif %}>
+            <label for="email_notifications" style="font-weight: bold; color: #001A2F;">Receive Email Notifications</label>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <input type="checkbox" id="data_sharing" name="data_sharing" {% if data_sharing %}checked{% endif %}>
+            <label for="data_sharing" style="font-weight: bold; color: #001A2F;">Allow Data Sharing</label>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <input type="checkbox" id="activity_tracking" name="activity_tracking" {% if activity_tracking %}checked{% endif %}>
+            <label for="activity_tracking" style="font-weight: bold; color: #001A2F;">Track Activity</label>
+        </div>
+        
+        <button type="submit" style="background-color: #001A2F; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Save Changes
+        </button>
+    </form>
+</div>
+{% endblock %}
