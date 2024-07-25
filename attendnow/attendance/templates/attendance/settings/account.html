@@ -1,0 +1,47 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Account Settings{% endblock %}
+
+{% block content %}
+<div style="background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 80%; margin: 0 auto;">
+    <h2 style="color: #001A2F;">Account Settings</h2>
+    
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 20px;">
+            <label for="profile_picture" style="font-weight: bold; color: #001A2F;">Profile Picture:</label><br>
+            <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+            <div style="margin-top: 10px;">
+                {% if user.userprofile.profile_picture %}
+                    <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;"/>
+                {% else %}
+                    <i class="fas fa-user-circle" style="font-size: 150px; color: #001A2F;"></i>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label for="username" style="font-weight: bold; color: #001A2F;">Screen Name:</label><br>
+            <input type="text" id="username" name="username" value="{{ form.username.value }}" style="width: 100%; padding: 10px;">
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label for="email" style="font-weight: bold; color: #001A2F;">Email Address:</label><br>
+            <input type="email" id="email" name="email" value="{{ form.email.value }}" style="width: 100%; padding: 10px;">
+        </div>
+        
+        <button type="submit" style="background-color: #001A2F; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Save Changes
+        </button>
+    </form>
+</div>
+{% endblock %}

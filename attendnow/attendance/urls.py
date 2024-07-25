@@ -58,6 +58,9 @@ urlpatterns = [
     path('admin-panel/users/', views.AdminGetUsers.as_view(), name='admin_users'),
     path('admin-panel/attendance-today/', views.AdminGetTodaysAttendance.as_view(), name='admin_todays_attendance'),
     path('admin-panel/modify-smtp-settings/', views.ChangeAdminSMDP.as_view(), name='change_smtp_settings'),
+    path('forgot_password/', views.forgot_password, name='forgot_password'),
+    path('reset_password_code/', views.reset_password_code, name='reset_password_code'),
+    path('set_new_password/', views.set_new_password, name='set_new_password'),
 
 
 ]

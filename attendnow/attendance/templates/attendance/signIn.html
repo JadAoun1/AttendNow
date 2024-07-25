@@ -15,18 +15,20 @@
             Sign in with Google
         </button>
         <div style="margin-bottom: 20px; font-size: 16px; font-weight: 600;">---------- OR ----------</div>
-        <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
-            <i class="fas fa-user" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
-            <input type="text" id="username" placeholder="Email/Username" style="width: 100%; padding: 15px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+        <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px; display: flex; align-items: center;">
+            <i class="fas fa-user" style="margin-right: 10px; color: #ccc;"></i>
+            <input type="text" id="username" placeholder="Email/Username" style="flex: 1; padding: 15px 20px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
         </div>
-        <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
-            <i class="fas fa-lock" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
-            <input type="password" id="password" placeholder="Password" style="width: 100%; padding: 15px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+        <div style="position: relative; width: calc(100% - 20px); margin-bottom: 20px; display: flex; align-items: center;">
+            <i class="fas fa-lock" style="margin-right: 10px; color: #ccc;"></i>
+            <input type="password" id="password" placeholder="Password" style="flex: 1; padding: 15px 20px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
         </div>
+        <a href="{% url 'forgot_password' %}" style="display: block; color: #007ACC; text-align: center; font-size: 14px; text-decoration: none; margin-bottom: 20px;">Forgot Password?</a>
         <button onclick="handleLogin(event)" style="width: calc(100% - 20px); padding: 15px; margin-top: 20px; background-color: #001A2F; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">Log In</button>
         <div style="margin-top: 20px; font-size: 16px; color: #007ACC;">
             Don't have an account? <a href="{% url 'sign_up' %}" style="color: #007ACC; text-decoration: none; font-weight: 600;">Sign Up</a>
         </div>
+        <div id="error-message" style="color: red; margin-top: 10px;"></div>
     </div>
 </div>
   

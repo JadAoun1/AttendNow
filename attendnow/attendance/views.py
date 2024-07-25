@@ -170,6 +170,12 @@ def admin_dashboard(request):
 def change_email_password(request):
 
     return render(request, 'attendance/change_email_password.html')
+from .models import UserProfile
+from .forms import AccountSettingsForm
+from .forms import NotificationSettingsForm
+from django.contrib.auth import get_user_model
+
+
 def home(request):
     return render(request, 'attendance/home.html')
 
@@ -416,6 +422,10 @@ def add_view_groups(request):
 def messages(request):
     return render(request, 'attendance/messages.html')
 
+def app_settings(request):
+    # Your view logic here
+    return render(request, 'attendance/settings/app_settings.html')
+
 def calendar(request):
     return render(request, 'attendance/calendar.html')
 
@@ -437,36 +447,125 @@ def overall_attendance(request):
 def mark_attendance(request):
     return render(request, 'attendance/mark_attendance.html')
 
-@login_required
 def account_settings(request):
-    # Handle account settings logic here
-    return render(request, 'settings/account_settings.html')
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = AccountSettingsForm(request.POST, request.FILES, instance=request.user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your account settings have been updated successfully.')
+                return redirect('account_settings')
+        else:
+            form = AccountSettingsForm(instance=request.user)
+    else:
+        # Handle anonymous users or provide a dummy form
+        form = AccountSettingsForm()  # Could be a blank form or customized for anonymous users
 
-@login_required
+    return render(request, 'attendance/settings/account.html', {'form': form})
+
 def notifications(request):
-    # Handle notification settings logic here
-    return render(request, 'settings/notifications.html')
+    if request.method == 'POST':
+        form = NotificationSettingsForm(request.POST)
+        if form.is_valid():
+            # Process the data in form.cleaned_data
+            # Here you would save the data to your database or user session
+            return redirect('notification_settings')  # Redirect to the same page to show a fresh form
+    else:
+        form = NotificationSettingsForm()  # An unbound form
 
-@login_required
+    return render(request, 'attendance/settings/notifications.html', {'form': form})
 def password_reset(request):
-    # Handle password reset logic here
-    return render(request, 'settings/password_reset.html')
+    if request.method == 'POST':
+        # Handle POST request
+        pass
+    return render(request, 'attendance/settings/password_reset.html')
 
-@login_required
-def app_settings(request):
-    # Handle app specific settings logic here
-    return render(request, 'settings/app_settings.html')
-
-@login_required
 def privacy_settings(request):
     # Handle privacy related settings here
-    return render(request, 'settings/privacy_settings.html')
+    return render(request, 'attendance/settings/privacy_settings.html')
 
-@login_required
 def contact_support(request):
     # Handle support contact logic here
-    return render(request, 'settings/contact_support.html')
+    return render(request, 'attendance/settings/support.html')
 
+
+def privacy_settings(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            # Get form data
+            profile_visibility = request.POST.get('profile_visibility')
+            email_notifications = 'email_notifications' in request.POST
+            data_sharing = 'data_sharing' in request.POST
+            activity_tracking = 'activity_tracking' in request.POST
+            
+            # Get the current user's profile or create one if it doesn't exist
+            user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+            
+            # Update the user's profile settings
+            user_profile.profile_visibility = profile_visibility
+            user_profile.email_notifications = email_notifications
+            user_profile.data_sharing = data_sharing
+            user_profile.activity_tracking = activity_tracking
+            user_profile.save()
+            
+            # Optionally add a success message
+            messages.success(request, 'Your privacy settings have been updated successfully.')
+            
+            # Redirect back to the settings page
+            return redirect('settings')
+        else:
+            # Handle the case where the user is not authenticated
+            messages.error(request, 'You need to be logged in to update privacy settings.')
+            return redirect('login')  # Redirect to login page or wherever appropriate
+
+    # Provide context for the initial form render
+    context = {
+        # Add necessary context if needed
+    }
+    return render(request, 'attendance/settings/privacy_settings.html', context)
+
+User = get_user_model()
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            if UserProfile.objects.filter(email=email).exists():
+                user_profile = UserProfile.objects.get(email=email)
+                user = user_profile.user
+                # Implement password reset logic here
+                return HttpResponse("Password reset link has been sent to your email.")
+            else:
+                return HttpResponse("No user with that email found.")
+        except UserProfile.DoesNotExist:
+            return HttpResponse("No user with that email found.")
+    return render(request, 'attendance/settings/forgot_password.html')
+
+def reset_password_code(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        reset_code = request.POST['reset_code']
+        user = User.objects.get(email=email)
+        if user.profile.reset_code == int(reset_code):
+            return redirect('set_new_password')
+        else:
+            messages.error(request, 'Invalid reset code')
+    return render(request, 'attendance/settings/reset_password_code.html')
+
+def set_new_password(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        new_password = request.POST['new_password']
+        confirm_password = request.POST['confirm_password']
+        if new_password == confirm_password:
+            user = User.objects.get(email=email)
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, 'Password reset successfully')
+            return redirect('sign_in')
+        else:
+            messages.error(request, 'Passwords do not match')
+    return render(request, 'attendance/settings/set_new_password.html')
 
 scheduler = BackgroundScheduler()
 #Use this for testing
