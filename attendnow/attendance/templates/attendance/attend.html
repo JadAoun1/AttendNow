@@ -13,7 +13,7 @@
             <video id="video" width="320" height="240" autoplay style="border: 3px solid #003366; border-radius: 10px; margin-bottom: 10px;"></video>
             <canvas id="canvas" width="320" height="240" style="display:none; border: 3px solid #003366; border-radius: 10px;"></canvas>
             <div style="display: flex; justify-content: center; width: 100%;">
-                <button type="button" id="capture" class="btn btn-primary btn-lg rounded-pill" style="background-color: #002B5B; color: white; border: none; padding: 10px 20px; flex-grow: 1; margin-right: 5px; display: block;">Capture Photo Zabre</button>
+                <button type="button" id="capture" class="btn btn-primary btn-lg rounded-pill" style="background-color: #002B5B; color: white; border: none; padding: 10px 20px; flex-grow: 1; margin-right: 5px; display: block;">Capture Photo</button>
             </div>
         </div>
         <button type="submit" class="btn btn-primary btn-lg rounded-pill" style="background-color: #002B5B; border: none; color: white; padding: 10px 20px;">Submit</button>
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
     startVideoStream();
 
     captureButton.addEventListener('click', function() {
-        if (captureButton.innerText === 'Capture Photo Zabre') {
+        if (captureButton.innerText === 'Capture Photo') {
             const context = canvas.getContext('2d');
             context.drawImage(video, 0, 0, 320, 240);
             video.pause();
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             canvas.style.display = 'none';
             video.style.display = 'block';
-            captureButton.innerText = 'Capture Photo Zabre';
+            captureButton.innerText = 'Capture Photo';
             startVideoStream();
         }
     });

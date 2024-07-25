@@ -1,0 +1,109 @@
+{% extends 'attendance/base.html' %}
+
+{% load static %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<div style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 120px); background: white;">
+    <div style="background-color: #FFFFFF; border-radius: 20px; padding: 40px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+
+        <h1 style="margin-bottom: 20px; font-size: 24px; color: #003366;">Register Admin Account</h1>
+        <form method="post" onsubmit="handleRegister(event)" style="margin-top: 20px;">
+            {% csrf_token %}
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-user" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="text" placeholder="First Name" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-user" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="text" placeholder="Last Name" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-user" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="text" placeholder="Username" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-envelope" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="email" placeholder="SMTP Email Address" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-lock" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="password" placeholder="Password" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-lock" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="password" placeholder="Confirm Password" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+
+
+            <div id="error-message-password" class="error-message" style="color: #CC0000; margin-top: 10px; margin-bottom: 10px;"></div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-lock" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="password" placeholder="SMTP Password" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <button type="submit" style="width: calc(100% - 20px); padding: 15px; margin-top: 20px; background-color: #001A2F; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer;">Register</button>
+            <div id="error-message-api" class="error-message" style="color: #CC0000; margin-top: 10px; margin-bottom: 10px;"></div>
+
+
+
+        </form>
+    </div>
+</div>
+
+<script>
+async function handleRegister(event) {
+    document.getElementById('error-message-api').innerText = '';
+    event.preventDefault();  // Prevent form from submitting the default way
+
+    const firstName = document.querySelector('[placeholder="First Name"]').value;
+    const lastName = document.querySelector('[placeholder="Last Name"]').value;
+    const username = document.querySelector('[placeholder="Username"]').value;
+    const smtpEmail = document.querySelector('[placeholder="SMTP Email Address"]').value;
+    const password = document.querySelector('[placeholder="Password"]').value;
+    const confirmPassword = document.querySelector('[placeholder="Confirm Password"]').value;
+    const smtpPassword = document.querySelector('[placeholder="SMTP Password"]').value;
+    const fullName = `${firstName} ${lastName}`;
+
+    if (password !== confirmPassword) {
+        document.getElementById('error-message-password').innerText = 'Passwords do not match. Please try again.';
+        return;
+    }
+    else {
+        document.getElementById('error-message-password').innerText = '';
+    }
+
+    const formData = new FormData();
+    formData.append('full_name', fullName);
+    formData.append('smtp_email', smtpEmail);
+    formData.append('password', password);
+    formData.append('smtp_password', smtpPassword);
+    formData.append('username', username);
+
+    try {
+        const response = await fetch('/admin-panel/register/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert(data.message);
+            window.location.href = '/admin-panel';
+        } else if (response.status === 400) {
+            document.getElementById('error-message-api').innerText = data.error_message || 'Registration failed. Please check your details.';
+        } else {
+            document.getElementById('error-message-api').innerText = data.detail || 'Registration failed. Please check your details.';
+        }
+    } catch (error) {
+        document.getElementById('error-message-api').innerText = 'An unexpected error occurred. Please try again.';
+    }
+}
+</script>
+
+{% endblock %}

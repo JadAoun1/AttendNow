@@ -1,0 +1,65 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Weekly Attendance{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center">User Attendance</h1>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <table class="table table-striped" id="attendance-table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">University ID</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Attendance Time</th> <!-- New column for attendance time -->
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/admin-panel/attendance-today/', {  // Update endpoint if needed
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access')}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const tableBody = document.querySelector('#attendance-table tbody');
+
+        data.forEach(record => {
+            const user = record.user;
+            const timestamp = new Date(record.timestamp);
+            const formattedTime = moment(timestamp).format('YYYY-MM-DD HH:mm:ss'); // Format time
+
+            // Create a table row with user details and attendance time
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.full_name}</td>
+                <td>${user.university_id}</td>
+                <td><img src="${user.image_url}" alt="${user.full_name}" style="max-width: 100px; max-height: 100px;"></td>
+                <td>${formattedTime}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching attendance data:', error);
+    });
+});
+</script>
+{% endblock %}
