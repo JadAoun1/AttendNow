@@ -1,57 +1,121 @@
 {% extends 'attendance/base.html' %}
 
+{% load static %}
+
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<h1>Sign Up</h1>
-<form method="post">
-    {% csrf_token %}
-    <div class="grid-container">
-        <div class="form-group">
-            {{ form.first_name.label_tag }}
-            {{ form.first_name }}
-            {% if form.first_name.errors %}
-                <div class="form-errors">{{ form.first_name.errors }}</div>
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.last_name.label_tag }}
-            {{ form.last_name }}
-            {% if form.last_name.errors %}
-                <div class="form-errors">{{ form.last_name.errors }}</div>
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.email.label_tag }}
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div class="form-errors">{{ form.email.errors }}</div>
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.username.label_tag }}
-            {{ form.username }}
-            {% if form.username.errors %}
-                <div class="form-errors">{{ form.username.errors }}</div>
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.password1.label_tag }}
-            {{ form.password1 }}
-            {% if form.password1.errors %}
-                <div class="form-errors">{{ form.password1.errors }}</div>
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.password2.label_tag }}
-            {{ form.password2 }}
-            {% if form.password2.errors %}
-                <div class="form-errors">{{ form.password2.errors }}</div>
-            {% endif %}
-        </div>
+
+<div style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 120px); background: white;">
+    <div style="background-color: #FFFFFF; border-radius: 20px; padding: 40px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+
+        <h1 style="margin-bottom: 20px; font-size: 24px; color: #003366;">Register Account</h1>
+        <form method="post" onsubmit="handleRegister(event)" style="margin-top: 20px;">
+            {% csrf_token %}
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-user" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="text" placeholder="First Name" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-user" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="text" placeholder="Last Name" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-envelope" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="email" placeholder="Email Address" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-lock" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="password" placeholder="Password" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px;">
+                <i class="fas fa-lock" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                <input type="password" placeholder="Confirm Password" required style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            </div>
+            <div id="error-message-password" class="error-message" style="color: #CC0000; margin-top: 10px; margin-bottom: 10px;"></div>
+
+
+            <div id="id-container" style="margin-bottom: 10px; ">
+                <div style="position: relative; width: calc(100% - 20px);">
+                    <i class="fas fa-id-badge" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: #ccc;"></i>
+                    <input type="text" id="id-number" name="id_number" placeholder="Enter ID Number" style="width: 100%; padding: 12px 40px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+                </div>
+            </div>
+            <div style="text-align: left; font-size: 14px; margin-top: 20px;">
+                <input type="checkbox" required style="margin-right: 10px;">
+                I agree to the Terms & Conditions and Privacy Policy set out by this site.
+            </div>
+            <div class="form-group">
+                <label for="photo">Photo:</label>
+                <input type="file" id="photo" name="photo" accept="image/*" placeholder="Choose Photo" required>
+            </div>
+            <button type="submit" style="width: calc(100% - 20px); padding: 15px; margin-top: 20px; background-color: #001A2F; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer;">Register</button>
+            <div id="error-message-api" class="error-message" style="color: #CC0000; margin-top: 10px; margin-bottom: 10px;"></div>
+
+            <div style="background-color: transparent; color: #757575; border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-top: 20px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer;">
+                <i class="fab fa-google" style="font-size: 20px; margin-right: 10px;"></i>
+                Continue with Google
+            </div>
+            <div style="font-size: 14px; color: #007ACC; text-align: center; margin-top: 20px;">
+                Already have an account? <a href="{% url 'sign_in' %}" style="color: #007ACC; text-decoration: none; font-weight: 600;">Login</a>
+            </div>
+
+        </form>
     </div>
-    <button type="submit" class="btn">Create Account</button>
-</form>
-<div class="or">OR</div>
-<a href="#" class="btn btn-google">Sign in with Google</a>
+</div>
+
+<script>
+async function handleRegister(event) {
+    document.getElementById('error-message-api').innerText = '';
+    event.preventDefault();  // Prevent form from submitting the default way
+
+    const firstName = document.querySelector('[placeholder="First Name"]').value;
+    const lastName = document.querySelector('[placeholder="Last Name"]').value;
+    const email = document.querySelector('[placeholder="Email Address"]').value;
+    const password = document.querySelector('[placeholder="Password"]').value;
+    const confirmPassword = document.querySelector('[placeholder="Confirm Password"]').value;
+    const idNumber = document.getElementById('id-number').value;
+    const photo = document.getElementById('photo').files[0];
+    const fullName = `${firstName} ${lastName}`;
+
+    if (password !== confirmPassword) {
+        document.getElementById('error-message-password').innerText = 'Passwords do not match. Please try again.';
+        return;
+    }
+    else {
+        document.getElementById('error-message-password').innerText = '';
+    }
+
+    const formData = new FormData();
+    formData.append('full_name', fullName);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('university_id', idNumber);
+    formData.append('photo', photo);
+
+    try {
+        const response = await fetch('/api/register/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert(data.message);
+            window.location.href = '/sign_in';
+        } else if (response.status === 400) {
+            document.getElementById('error-message-api').innerText = data.error_message || 'Registration failed. Please check your details.';
+        } else {
+            document.getElementById('error-message-api').innerText = data.detail || 'Registration failed. Please check your details.';
+        }
+    } catch (error) {
+        document.getElementById('error-message-api').innerText = 'An unexpected error occurred. Please try again.';
+    }
+}
+</script>
+
 {% endblock %}

@@ -1,0 +1,7 @@
+venv/Lib/site-packages/face_recognition_models
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+

@@ -1,34 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AttendNow{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     {% load static %}
     <link rel="stylesheet" href="{% static 'attendance/styles.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .nav ul li a:hover {
+            color: #00AEEF;
+        }
+        footer {
+            font-size: 0.875rem;
+            padding: 5px 20px;
+        }
+    </style>
 </head>
-<body>
-    <!-- Navbar section -->
-    <div class="navbar">
-        <a href="{% url 'home' %}" class="brand">AttendNow</a>
-        <div class="nav-links">
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'about' %}">About</a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}">Logout</a>
-            {% else %}
-                <a href="{% url 'sign_in' %}">Sign In</a>
-                <a href="{% url 'sign_up' %}">Sign Up</a>
-            {% endif %}
-        </div>
+
+<header class="header" style="background-color: #001A2F; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <img src="{% static 'AttendNowLogo.png' %}" alt="Logo" style="width: 80px; height: auto;">
+        {% if user.is_authenticated %}
+        <!-- Navbar for logged-in users -->
+        <nav class="nav" style="display: flex;">
+            <ul style="display: flex; list-style: none; padding: 0; margin: 0;">
+                <li style="margin-right: 10px; position: relative;">
+                    <a href="{% url 'home' %}" class="nav-link" style="color: white; text-decoration: none;">Home</a>
+                </li>
+                <li style="margin-right: 10px; position: relative;">
+                    <a href="{% url 'profile' %}" class="nav-link" style="color: white; text-decoration: none;">Profile</a>
+                </li>
+                <li style="margin-right: 10px; position: relative;">
+                    <a href="{% url 'weekly_attendance_view' %}" class="nav-link" style="color: white; text-decoration: none;">Weekly Attendance</a>
+                </li>
+                <li style="position: relative;">
+                    <a href="{% url 'logout' %}" class="nav-link" style="color: white; text-decoration: none;">Logout</a>
+                </li>
+            </ul>
+        </nav>
+        {% else %}
+        <!-- Navbar for logged-out users -->
+        <nav class="nav" style="display: flex;">
+            <ul style="display: flex; list-style: none; padding: 0; margin: 0;">
+                <li style="margin-right: 10px; position: relative;">
+                    <a href="{% url 'home' %}" class="nav-link" style="color: white; text-decoration: none;">Home</a>
+                </li>
+                <li style="margin-right: 10px; position: relative;">
+                    <a href="{% url 'sign_in' %}" class="nav-link" style="color: white; text-decoration: none;">Sign In</a>
+                </li>
+                <li style="position: relative;">
+                    <a href="{% url 'sign_up' %}" class="nav-link" style="color: white; text-decoration: none;">Sign Up</a>
+                </li>
+            </ul>
+        </nav>
+        {% endif %}
     </div>
-    <!-- Main content wrapper to center content -->
-    <div class="content-wrapper">
-        <div class="container">
-            <img src="{% static 'logo.png' %}" alt="Logo">
-            {% block content %}{% endblock %}
-        </div>
+</header>
+
+    <!-- Main content wrapper -->
+    <div class="container content-wrapper" style="min-height: calc(100vh - 160px);">
+        {% block content %}{% endblock %}
     </div>
+
+    <!-- Footer section -->
+    <footer style="background-color: #001A2F; color: white; padding: 5px 20px; font-size: 0.875rem;">
+        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+            <p>&copy; 2024 AttendNow. All rights reserved.</p>
+            <p>
+                <a href="#" style="color: #00AEEF; text-decoration: none;">Privacy Policy</a> |
+                <a href="#" style="color: #00AEEF; text-decoration: none;">Terms of Service</a>
+            </p>
+            <div style="margin-top: 5px;">
+                <img src="{% static 'AttendNowLogo.png' %}" alt="Logo" style="width: 80px; height: auto;">
+            </div>
+            <p style="margin-top: 5px;">Connect with us: <a href="mailto:info@attendnow.com" style="color: #00AEEF; text-decoration: none;">info@attendnow.com</a></p>
+            <p>Follow us on:
+                <a href="#" style="color: #00AEEF; text-decoration: none;"><i class="fab fa-facebook"></i></a>
+                <a href="#" style="color: #00AEEF; text-decoration: none;"><i class="fab fa-twitter"></i></a>
+                <a href="#" style="color: #00AEEF; text-decoration: none;"><i class="fab fa-linkedin"></i></a>
+            </p>
+        </div>
+    </footer>
 </body>
+
 </html>

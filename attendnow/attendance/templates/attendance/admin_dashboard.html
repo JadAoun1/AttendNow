@@ -1,0 +1,46 @@
+{% extends 'attendance/base.html' %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div style="background-color: white; text-align: center; padding: 50px 0;">
+    <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 0 auto 30px auto; padding: 20px; width: 70%; display: flex; justify-content: space-around; align-items: center; flex-direction: column;">
+        <i class="fas fa-user-circle" style="font-size: 60px; color: #001A2F; border-radius: 50%; background-color: white; padding: 10px; margin-bottom: 20px;"></i>
+        <div style="font-size: 22px; font-weight: bold; color: #001A2F;">{{ user.first_name }} {{ user.last_name }}</div>
+        <div style="font-size: 16px; color: #666;">{{ user.organization }}</div>
+        <div style="font-size: 16px; color: #666;">{{ user.position }}</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto; gap: 30px; width: 70%; margin: 0 auto;">
+
+
+
+        <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 40px; text-align: center; cursor: pointer;" onclick="window.location.href='{% url 'users' %}'">
+            <i class="fas fa-users" style="font-size: 40px; color: #001A2F; margin-bottom: 20px;"></i>
+            <div style="font-size: 18px; color: #001A2F;">users</div>
+        </div>
+        <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 40px; text-align: center; cursor: pointer;" onclick="window.location.href='{% url 'calendar' %}'">
+            <i class="fas fa-calendar-alt" style="font-size: 40px; color: #001A2F; margin-bottom: 20px;"></i>
+            <div style="font-size: 18px; color: #001A2F;">Calendar</div>
+        </div>
+        <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 40px; text-align: center; cursor: pointer;" onclick="window.location.href='{% url 'activity' %}'">
+            <i class="fas fa-chart-line" style="font-size: 40px; color: #001A2F; margin-bottom: 20px;"></i>
+            <div style="font-size: 18px; color: #001A2F;">Activity</div>
+        </div>
+       <!-- SMTP Settings -->
+    <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px; padding: 40px; text-align: center; width: 250px; height: 250px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="location.href='{% url 'smtp_settings' %}'">
+        <i class="fas fa-inbox" style="font-size: 60px; color: #001A2F;"></i>
+        <p style="font-size: 18px; color: #001A2F; margin-top: 20px;">Modify SMTP Settings</p>
+    </div>
+        <!-- New Attendance Records Box -->
+        <div style="background-color: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 40px; text-align: center; cursor: pointer;" onclick="window.location.href='{% url 'admin_user_attendance' %}'">
+            <i class="fas fa-file-alt" style="font-size: 40px; color: #001A2F; margin-bottom: 20px;"></i>
+            <div style="font-size: 18px; color: #001A2F;">Attendance Records</div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

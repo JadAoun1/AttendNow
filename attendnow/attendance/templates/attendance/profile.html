@@ -5,16 +5,113 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<h1>Your Profile</h1>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="grid-container">
-        <img src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'default-profile.png' %}{% endif %}" alt="Profile Picture" style="width: 100px; border-radius: 50%;">
-        <input type="file" name="picture" accept="image/*">
-        <input type="text" name="first_name" placeholder="First Name" value="{{ user.first_name }}" required>
-        <input type="text" name="last_name" placeholder="Last Name" value="{{ user.last_name }}" required>
-        <input type="email" name="email" placeholder="Email" value="{{ user.email }}" required>
+<style>
+    .profile-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        padding: 20px;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .card h2 {
+        margin-top: 0;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .profile-picture {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-picture img {
+        width: 100px;
+        border-radius: 50%;
+    }
+
+    .btn {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+<div class="profile-container">
+    <h1>Your Profile</h1>
+
+    <div class="card profile-picture">
+        <img src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'default-profile.png' %}{% endif %}" alt="Profile Picture">
+        <h2>{{ user.first_name }} {{ user.last_name }}</h2>
     </div>
-    <button type="submit" class="btn">Update Profile</button>
-</form>
+
+    <div class="card">
+        <h2>Enrolled Classes/Organizations</h2>
+        {% if user_classes %}
+            <ul>
+                {% for class in user_classes %}
+                    <li>{{ class.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No classes/organizations added yet.</p>
+        {% endif %}
+    </div>
+
+    <button id="edit-profile-btn" class="btn btn-primary btn-lg rounded-pill">Edit Profile</button>
+
+    <form id="update-profile-form" class="card hidden" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="grid-container">
+            <input type="file" name="picture" accept="image/*">
+            <input type="text" name="first_name" placeholder="First Name" value="{{ user.first_name }}" required>
+            <input type="text" name="last_name" placeholder="Last Name" value="{{ user.last_name }}" required>
+            <input type="email" name="email" placeholder="Email" value="{{ user.email }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg rounded-pill">Update Profile</button>
+    </form>
+
+    <div class="card">
+        <h2>Add Class/Organization</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="grid-container">
+                {{ add_class_form.name }}
+            </div>
+            <button type="submit" name="add_class_organization" class="btn btn-primary btn-lg rounded-pill">Add</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('edit-profile-btn').addEventListener('click', function() {
+        document.getElementById('update-profile-form').classList.toggle('hidden');
+        this.classList.toggle('hidden');
+    });
+</script>
 {% endblock %}

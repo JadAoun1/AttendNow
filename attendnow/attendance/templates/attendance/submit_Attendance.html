@@ -1,0 +1,35 @@
+{% extends 'attendance/base.html' %}
+{% load static %}
+
+{% block title %}Submit Attendance{% endblock %}
+
+{% block content %}
+<h1>Submit Attendance</h1>
+<form method="post" class="attendance-form">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required class="form-control">
+    </div>
+    <button type="submit" class="btn-primary btn-lg rounded-pill">Submit</button>
+</form>
+<button id="facial-recognition-btn" class="btn btn-secondary">Use Facial Recognition</button>
+
+<script>
+    document.getElementById('facial-recognition-btn').addEventListener('click', function() {
+        fetch('/facial_recognition/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Facial recognition successful: ' + data.recognized_faces.join(', '));
+                } else {
+                    alert('Facial recognition failed.');
+                }
+            });
+    });
+</script>
+{% endblock %}

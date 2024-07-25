@@ -1,0 +1,76 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Weekly Attendance{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center">Weekly Attendance</h1>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <table class="table table-striped" id="attendance-table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/weekly_attendance/', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access')}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const tableBody = document.querySelector('#attendance-table tbody');
+        const calendarEl = document.getElementById('calendar');
+        const events = [];
+
+        data.forEach(record => {
+            const date = new Date(record.timestamp);
+            const dateString = date.toISOString().split('T')[0];
+            const timeString = date.toTimeString().split(' ')[0];
+
+            // Add to table
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${dateString}</td><td>${timeString}</td>`;
+            tableBody.appendChild(row);
+
+            // Add to calendar events
+            events.push({
+                title: 'Attended',
+                start: date.toISOString()
+            });
+        });
+
+        // Initialize FullCalendar
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridWeek',
+            events: events
+        });
+
+        calendar.render();
+    })
+    .catch(error => {
+        console.error('Error fetching attendance data:', error);
+    });
+});
+</script>
+{% endblock %}
