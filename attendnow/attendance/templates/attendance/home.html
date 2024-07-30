@@ -7,9 +7,9 @@
 {% block content %}
 
 <div style="width: 100%; min-height: 100vh; padding: 64px 24px; background: white; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
-    <div style="max-width: 1440px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 80px;">
-        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 40px;">
-            <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 24px;">
+    <div style="max-width: 1440px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 100px;">
+        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 60px;">
+            <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 30px;">
                 <div style="text-align: center; color: #001A2F; font-size: 56px; font-family: 'Inika', serif; font-weight: 700; line-height: 67.20px;">Welcome to AttendNow</div>
                 <div style="text-align: center; color: #212121; font-size: 18px; font-family: 'Inter', sans-serif; font-weight: 400; line-height: 27px;">Streamline your attendance process with our cutting-edge facial recognition technology. Fast, reliable, and secure.</div>
             </div>
@@ -22,76 +22,74 @@
         </div>
     </div>
 
-    <div style="max-width: 1440px; width: 100%; display: flex; justify-content: space-between; align-items: flex-start; padding: 64px 24px; gap: 80px;">
-        <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 24px;">
+    <div style="max-width: 1440px; width: 100%; display: flex; justify-content: space-between; align-items: flex-start; padding: 64px 24px; gap: 100px;">
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 30px;">
             <div style="color: #001A2F; font-size: 48px; font-family: 'Inika', serif; font-weight: 400;">How It Works</div>
             <div style="color: black; font-size: 24px; font-family: 'Inika', serif; font-weight: 400;">Enroll in our system by uploading your photo. Our advanced algorithms ensure quick and accurate identification for hassle-free check-ins.</div>
         </div>
-        <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 16px;">
-            <div style="display: flex; align-items: center; gap: 24px;">
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 24px;">
+            <div style="display: flex; align-items: center; gap: 30px;">
                 <i class="fas fa-check-circle" style="font-size: 40px; color: #001A2F; flex-shrink: 0;"></i>
                 <div style="color: black; font-size: 20px; font-family: 'Inika', serif; font-weight: 400;">High accuracy in recognition minimizes errors and enhances security.</div>
             </div>
-            <div style="display: flex; align-items: center; gap: 24px;">
+            <div style="display: flex; align-items: center; gap: 30px;">
                 <i class="fas fa-tachometer-alt" style="font-size: 40px; color: #001A2F; flex-shrink: 0;"></i>
                 <div style="color: black; font-size: 20px; font-family: 'Inika', serif; font-weight: 400;">Fast processing ensures smooth entry and exit, perfect for high traffic environments.</div>
             </div>
-            <div style="display: flex; align-items: center; gap: 24px;">
+            <div style="display: flex; align-items: center; gap: 30px;">
                 <i class="fas fa-lock" style="font-size: 40px; color: #001A2F; flex-shrink: 0;"></i>
                 <div style="color: black; font-size: 20px; font-family: 'Inika', serif; font-weight: 400;">Robust security features protect your privacy and prevent unauthorized access.</div>
             </div>
         </div>
     </div>
 
-    <div style="width: 1131px; height: 560px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 64px; display: inline-flex">
-        <div style="height: 102px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 16px; display: flex">
-            <div style="color: #001A2F; font-size: 48px; font-family: 'Inika', serif; font-weight: 400; line-height: 38.40px; word-wrap: break-word">The Development Team</div>
+    <div style="width: 1131px; height: 560px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 80px; display: inline-flex;">
+        <div style="height: 102px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 20px; display: flex;">
+            <div style="color: #001A2F; font-size: 48px; font-family: 'Inika', serif; font-weight: 400; line-height: 38.40px; word-wrap: break-word;">The Development Team</div>
         </div>
-        <div style="align-self: stretch; justify-content: center; align-items: flex-start; gap: 48px; display: inline-flex">
-            <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: center; gap: 24px; display: inline-flex">
-                <div style="width: 270px; height: 270px; justify-content: center; align-items: center; display: inline-flex">
-                    <img style="width: 270px; align-self: stretch" src="{% static 'undraw_coding_re_iv62.svg' %}" />
+        <div style="align-self: stretch; justify-content: center; align-items: flex-start; gap: 60px; display: inline-flex;">
+            <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: center; gap: 30px; display: inline-flex;">
+                <div style="width: 270px; height: 270px; justify-content: center; align-items: center; display: inline-flex;">
+                    <img style="width: 270px; align-self: stretch;" src="{% static 'undraw_coding_re_iv62.svg' %}" />
                 </div>
-                <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 16px; display: flex">
-                    <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; display: flex">
-                        <div style="align-self: stretch; text-align: center; color: black; font-size: 20px; font-family: Inter; font-weight: 700; line-height: 30px; word-wrap: break-word">Jad Aoun</div>
-                        <div style="align-self: stretch; text-align: center; color: black; font-size: 18px; font-family: Inter; font-weight: 400; line-height: 27px; word-wrap: break-word">Frontend Developer</div>
+                <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 20px; display: flex;">
+                    <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; display: flex;">
+                        <div style="align-self: stretch; text-align: center; color: black; font-size: 20px; font-family: Inter; font-weight: 700; line-height: 30px; word-wrap: break-word;">Jad Aoun</div>
+                        <div style="align-self: stretch; text-align: center; color: black; font-size: 18px; font-family: Inter; font-weight: 400; line-height: 27px; word-wrap: break-word;">Frontend Developer</div>
                     </div>
                 </div>
             </div>
-            <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: center; gap: 24px; display: inline-flex">
-                <div style="width: 270px; height: 270px; justify-content: center; align-items: center; display: inline-flex">
-                    <img style="width: 270px; align-self: stretch" src="{% static 'undraw_coding_re_iv62.svg' %}" />
+            <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: center; gap: 30px; display: inline-flex;">
+                <div style="width: 270px; height: 270px; justify-content: center; align-items: center; display: inline-flex;">
+                    <img style="width: 270px; align-self: stretch;" src="{% static 'undraw_coding_re_iv62.svg' %}" />
                 </div>
-                <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 16px; display: flex">
-                    <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; display: flex">
-                        <div style="align-self: stretch; text-align: center; color: black; font-size: 20px; font-family: Inter; font-weight: 700; line-height: 30px; word-wrap: break-word">Gavin Middleton</div>
-                        <div style="align-self: stretch; text-align: center; color: black; font-size: 18px; font-family: Inter; font-weight: 400; line-height: 27px; word-wrap: break-word">Backend Developer</div>
+                <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 20px; display: flex;">
+                    <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; display: flex;">
+                        <div style="align-self: stretch; text-align: center; color: black; font-size: 20px; font-family: Inter; font-weight: 700; line-height: 30px; word-wrap: break-word;">Gavin Middleton</div>
+                        <div style="align-self: stretch; text-align: center; color: black; font-size: 18px; font-family: Inter; font-weight: 400; line-height: 27px; word-wrap: break-word;">Backend Developer</div>
                     </div>
                 </div>
             </div>
-            <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: center; gap: 24px; display: inline-flex">
-                <div style="width: 270px; height: 270px; justify-content: center; align-items: center; display: inline-flex">
-                    <img style="width: 270px; align-self: stretch" src="{% static 'undraw_coding_re_iv62.svg' %}" />
+            <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: center; gap: 30px; display: inline-flex;">
+                <div style="width: 270px; height: 270px; justify-content: center; align-items: center; display: inline-flex;">
+                    <img style="width: 270px; align-self: stretch;" src="{% static 'undraw_coding_re_iv62.svg' %}" />
                 </div>
-                <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 16px; display: flex">
-                    <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; display: flex">
-                        <div style="align-self: stretch; text-align: center; color: black; font-size: 20px; font-family: Inter; font-weight: 700; line-height: 30px; word-wrap: break-word">Muhamed El Majzoub</div>
-                        <div style="align-self: stretch; text-align: center; color: black; font-size: 18px; font-family: Inter; font-weight: 400; line-height: 27px; word-wrap: break-word">Backend Developer</div>
+                <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 20px; display: flex;">
+                    <div style="align-self: stretch; height: 57px; flex-direction: column; justify-content: flex-start; align-items: center; display: flex;">
+                        <div style="align-self: stretch; text-align: center; color: black; font-size: 20px; font-family: Inter; font-weight: 700; line-height: 30px; word-wrap: break-word;">Muhamed El Majzoub</div>
+                        <div style="align-self: stretch; text-align: center; color: black; font-size: 18px; font-family: Inter; font-weight: 400; line-height: 27px; word-wrap: break-word;">Backend Developer</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div style="width: 1440px; height: 391px; padding-left: 24px; padding-right: 24px; padding-top: 64px; padding-bottom: 64px; background: white; flex-direction: column; justify-content: flex-start; align-items: center; gap: 80px; display: inline-flex">
-        <div style="height: 263px; padding: 32px; background: #F5F7FA; border-radius: 16px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 40px; display: flex">
-            <div style="align-self: stretch; height: 199px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 24px; display: flex">
-                <div style="align-self: stretch; text-align: center; color: black; font-size: 48px; font-family: Inter; font-weight: 700; line-height: 57.60px; word-wrap: break-word">Ready to Get Started?</div>
-                <div style="align-self: stretch; text-align: center; color: black; font-size: 20px; font-family: Inika; font-weight: 400; word-wrap: break-word">Join AttendNow and transform your attendance management with our reliable facial recognition technology.</div>
-                <div style="padding-left: 24px; padding-right: 24px; padding-top: 12px; padding-bottom: 12px; background: black; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                    <div style="color: white; font-size: 12px; font-family: Inter; font-weight: 500; line-height: 16.80px; word-wrap: break-word">Sign Up</div>
-                </div>
+    <div style="width: 1440px; height: 391px; padding-left: 24px; padding-right: 24px; padding-top: 64px; padding-bottom: 64px; background: white; flex-direction: column; justify-content: flex-start; align-items: center; gap: 100px; display: inline-flex;">
+        <div style="height: 263px; padding: 32px; background: #F5F7FA; border-radius: 16px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 50px; display: flex;">
+            <div style="align-self: stretch; height: 199px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 30px; display: flex;">
+                <div style="align-self: stretch; text-align: center; color: black; font-size: 48px; font-family: Inter; font-weight: 700; line-height: 57.60px; word-wrap: break-word;">Ready to Get Started?</div>
+                <div style="align-self: stretch; text-align: center; color: black; font-size: 20px; font-family: Inika; font-weight: 400; word-wrap: break-word;">Join AttendNow and transform your attendance management with our reliable facial recognition technology.</div>
+                <a href="{% url 'sign_up' %}" style="width: calc(100% - 20px); padding: 15px; margin-top: 20px; background-color: #001A2F; border: none; border-radius: 20px; color: white; font-size: 16px; cursor: pointer; text-align: center; display: block;">Get Started</a>
             </div>
         </div>
     </div>
