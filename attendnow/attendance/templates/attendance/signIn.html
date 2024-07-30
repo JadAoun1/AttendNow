@@ -7,17 +7,15 @@
 
 {% block content %}
 
-<div style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 120px); background: white;">
-    <div style="background-color: #FFFFFF; border-radius: 20px; padding: 40px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+<div style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 120px); background: white; position: relative;">
+    <!-- Background SVG on the left -->
+    <img src="{% static 'undraw_login_re_4vu2.svg' %}" alt="Login Illustration" style="position: absolute; width: 1000px; height: auto; opacity: 0.5; z-index: 1; left: -300px;">
+    <!-- Sign In Box on the right -->
+    <div style="background-color: #FFFFFF; border-radius: 20px; padding: 40px; text-align: center; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); position: relative; z-index: 2; margin-left: auto;">
         <h1 style="margin-bottom: 20px; font-size: 24px; color: #003366;">Sign In</h1>
-        <button style="background: #ffffff; color: #757575; display: inline-flex; align-items: center; justify-content: center; width: calc(100% - 20px); padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">
-            <i class="fab fa-google" style="font-size: 20px; margin-right: 10px;"></i>
-            Sign in with Google
-        </button>
-        <div style="margin-bottom: 20px; font-size: 16px; font-weight: 600;">---------- OR ----------</div>
         <div style="position: relative; width: calc(100% - 20px); margin-bottom: 10px; display: flex; align-items: center;">
             <i class="fas fa-user" style="margin-right: 10px; color: #ccc;"></i>
-            <input type="text" id="username" placeholder="Email/Username" style="flex: 1; padding: 15px 20px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
+            <input type="text" id="username" placeholder="Email/User ID" style="flex: 1; padding: 15px 20px; border-radius: 20px; border: 1px solid #ccc; font-size: 16px;">
         </div>
         <div style="position: relative; width: calc(100% - 20px); margin-bottom: 20px; display: flex; align-items: center;">
             <i class="fas fa-lock" style="margin-right: 10px; color: #ccc;"></i>
@@ -31,6 +29,7 @@
         <div id="error-message" style="color: red; margin-top: 10px;"></div>
     </div>
 </div>
+
   
 <script>
 async function handleLogin(event) {
